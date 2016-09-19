@@ -37,19 +37,19 @@
 
                     <md-slider-container>
                         <span>Recent Quarter</span>
-                        <md-slider flex min="0" max="100" ng-model="color.red" aria-label="red" id="red-slider">
+                        <md-slider flex min="0" max="100" ng-model="vm.currentQuarterEPSGrowth" ng-change="vm.onFilterChange()" aria-label="eps_c_q" id="eps-c-q-slider" class="md-primary">
                         </md-slider>
                         <md-input-container>
-                            <input flex type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
+                            <input flex type="number" ng-model="vm.currentQuarterEPSGrowth" ng-change="vm.onFilterChange()" aria-label="eps_c_q" aria-controls="eps-c-q-slider">
                         </md-input-container>
                     </md-slider-container>
 
                     <md-slider-container>
                         <span>Last Quarter</span>
-                        <md-slider flex ng-model="color.green" min="0" max="100" aria-label="green" id="green-slider" class="md-accent">
+                        <md-slider flex ng-model="vm.lastQuarterEPSGrowth" ng-change="vm.onFilterChange()" min="0" max="100" aria-label="eps_l_q" id="eps-l-q-slider" class="md-accent">
                         </md-slider>
                         <md-input-container>
-                            <input flex type="number" ng-model="color.green" aria-label="green" aria-controls="green-slider">
+                            <input flex type="number" ng-model="vm.lastQuarterEPSGrowth" ng-change="vm.onFilterChange()" aria-label="eps_l_q" aria-controls="eps-l-q-slider">
                         </md-input-container>
                     </md-slider-container>
 
@@ -59,28 +59,19 @@
 
                     <md-slider-container>
                         <span>Recent Year</span>
-                        <md-slider flex min="0" max="100" ng-model="color.red" aria-label="red" id="red-slider">
+                        <md-slider flex min="0" max="100" ng-model="vm.currentAnnualEPSGrowth" ng-change="vm.onFilterChange()" aria-label="eps-c-y" id="eps-c-y-slider" class="md-primary">
                         </md-slider>
                         <md-input-container>
-                            <input flex type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
+                            <input flex type="number" ng-model="vm.currentAnnualEPSGrowth" ng-change="vm.onFilterChange()" aria-label="eps-c-y" aria-controls="eps-c-y-slider">
                         </md-input-container>
                     </md-slider-container>
 
                     <md-slider-container>
                         <span>Last Year</span>
-                        <md-slider flex ng-model="color.green" min="0" max="100" aria-label="green" id="green-slider" class="md-accent">
+                        <md-slider flex ng-model="vm.lastAnnualEPSGrowth" ng-change="vm.onFilterChange()" min="0" max="100" aria-label="eps-l-y" id="eps-l-y-slider" class="md-accent">
                         </md-slider>
                         <md-input-container>
-                            <input flex type="number" ng-model="color.green" aria-label="green" aria-controls="green-slider">
-                        </md-input-container>
-                    </md-slider-container>
-
-                    <md-slider-container>
-                        <span class="md-body-1">Previous Year</span>
-                        <md-slider flex ng-model="color.blue" min="0" max="100" aria-label="blue" id="blue-slider" class="md-primary">
-                        </md-slider>
-                        <md-input-container>
-                            <input flex type="number" ng-model="color.blue" aria-label="blue" aria-controls="blue-slider">
+                            <input flex type="number" ng-model="vm.lastAnnualEPSGrowth" ng-change="vm.onFilterChange()" aria-label="eps-l-y" aria-controls="eps-l-y-slider">
                         </md-input-container>
                     </md-slider-container>
 
@@ -90,10 +81,10 @@
 
                     <md-slider-container>
                         <span>Recent Year</span>
-                        <md-slider flex min="0" max="100" ng-model="color.red" aria-label="red" id="red-slider">
+                        <md-slider flex min="0" max="100" ng-model="vm.currentAnnualROE" ng-change="vm.onFilterChange()" aria-label="roe-c-y" id="roe-c-y-slider" class="md-primary">
                         </md-slider>
                         <md-input-container>
-                            <input flex type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
+                            <input flex type="number" ng-model="vm.currentAnnualROE" ng-change="vm.onFilterChange()" aria-label="roe-c-y" aria-controls="roe-c-y-slider">
                         </md-input-container>
                     </md-slider-container>
 
@@ -110,6 +101,9 @@
                 <!-- CONTENT -->
                 <div class="content fullpage-datatable" layout="column" flex>
 
+                    <table datatable="" dt-options="vm.dtOptions" dt-columns="vm.dtColumns" dt-instance="vm.dtInstance"
+                           class="row-border hover"></table>
+<!--
                     <table class="dataTable row-border hover" datatable="ng" dt-instance="vm.dtInstance"
                            dt-options="vm.dtOptions">
                         <thead>
@@ -174,6 +168,7 @@
                         </tr>
                         </tbody>
                     </table>
+-->
 
                 </div>
                 <!-- / CONTENT -->

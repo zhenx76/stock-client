@@ -18,12 +18,6 @@
                         templateUrl: 'app/main/stock-selector/stock-selector.html',
                         controller : 'StockSelectorController as vm'
                     }
-                },
-                resolve: {
-                    StockData: function (msApi)
-                    {
-                        return msApi.resolve('sample@get');
-                    }
                 }
             });
 
@@ -31,7 +25,12 @@
         $translatePartialLoaderProvider.addPart('app/main/stock-selector');
 
         // Api
-        msApiProvider.register('sample', ['app/data/stock-selector/stock-selector.json']);
+        msApiProvider.setBaseUrl('api/v1/');
+        msApiProvider.register('stock-financial', [
+            'stock-financial',
+            {},
+            {filter: {method: 'POST', isArray: true}}
+        ]);
 
         // Navigation
         msNavigationServiceProvider.saveItem('stocks', {
