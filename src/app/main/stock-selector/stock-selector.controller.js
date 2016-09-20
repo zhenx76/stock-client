@@ -25,6 +25,17 @@
             .withOption('createdRow', function(row) {
                 // Recompiling so we can bind Angular directive to the DT
                 $compile(angular.element(row).contents())($scope);
+            })
+            .withOption('initComplete', function() {
+                var api = this.api();
+                var searchBox = angular.element('body').find('#stock-symbol-search');
+
+                // Bind an external input as a table wide search box
+                if (searchBox.length > 0) {
+                    searchBox.on('keyup', function (event) {
+                        api.search(event.target.value).draw();
+                    });
+                }
             });
 
         vm.dtColumns = [
