@@ -21,6 +21,6 @@
             'app.quick-panel',
 
             // Apps
-            'app.stock-selector'
+            'app.stock'
         ]);
 })();

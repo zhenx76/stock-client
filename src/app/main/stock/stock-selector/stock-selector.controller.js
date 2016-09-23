@@ -3,13 +3,14 @@
     'use strict';
 
     angular
-        .module('app.stock-selector')
+        .module('app.stock')
         .controller('StockSelectorController', StockSelectorController);
 
     /** @ngInject */
     function StockSelectorController(DTOptionsBuilder, DTColumnBuilder, msApi, $compile, $scope, $filter, $timeout, $log)
     {
         var vm = this;
+        $log.info('controller');
 
         vm.dtOptions = DTOptionsBuilder.fromFnPromise(
             function() {

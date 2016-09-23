@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.stock-selector', [])
+        .module('app.stock', [])
         .config(config);
 
     /** @ngInject */
@@ -12,17 +12,17 @@
         // State
         $stateProvider
             .state('app.stock-selector', {
-                url    : '/stock-selector',
+                url    : '/stock/stock-selector',
                 views  : {
                     'content@app': {
-                        templateUrl: 'app/main/stock-selector/stock-selector.html',
+                        templateUrl: 'app/main/stock/stock-selector/stock-selector.html',
                         controller : 'StockSelectorController as vm'
                     }
                 }
             });
 
         // Translation
-        $translatePartialLoaderProvider.addPart('app/main/stock-selector');
+        $translatePartialLoaderProvider.addPart('app/main/stock/stock-selector');
 
         // Api
         msApiProvider.setBaseUrl('api/v1/');
@@ -39,7 +39,7 @@
             weight: 1
         });
 
-        msNavigationServiceProvider.saveItem('stocks.sample', {
+        msNavigationServiceProvider.saveItem('stocks.selector', {
             title    : 'Nasdaq',
             icon     : 'icon-tile-four',
             state    : 'app.stock-selector',
