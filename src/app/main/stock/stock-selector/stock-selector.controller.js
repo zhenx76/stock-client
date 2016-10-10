@@ -7,10 +7,9 @@
         .controller('StockSelectorController', StockSelectorController);
 
     /** @ngInject */
-    function StockSelectorController(DTOptionsBuilder, DTColumnBuilder, msApi, $compile, $scope, $filter, $timeout, $log)
+    function StockSelectorController(DTOptionsBuilder, DTColumnBuilder, msApi, $state, $compile, $scope, $filter, $timeout, $log)
     {
         var vm = this;
-        $log.info('controller');
 
         vm.dtOptions = DTOptionsBuilder.fromFnPromise(
             function() {
@@ -158,6 +157,10 @@
             }, 1000); // delay 1 second to reduce server calls
         };
 
+        vm.gotoStockDetail = function(symbol) {
+            $state.go('app.stock-financial', {symbol: symbol});
+        };
+
         // Private Methods
         //////////
         function getFilters() {
@@ -189,7 +192,7 @@
 
         function renderEditColumn(data, type, full, meta) {
             return '<md-button class="edit-button md-icon-button"'
-                + ' ng-click="vm.gotoProductDetail(product.id)" '
+                + ' ng-click="vm.gotoStockDetail(\'' + data.Symbol +'\')" '
                 + ' aria-label="Stock Details" translate translate-attr-aria-label="EC.PRODUCT_DETAILS">'
                 + ' <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>'
                 + '</md-button>';

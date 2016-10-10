@@ -12,7 +12,9 @@
                 'ngResource',
                 'ngSanitize',
                 'ngMaterial',
+                'chart.js',
                 'datatables',
+                'gridshore.c3js.chart',
                 'pascalprecht.translate',
                 'ui.router'
 

@@ -19,6 +19,22 @@
                         controller : 'StockSelectorController as vm'
                     }
                 }
+            })
+            .state('app.stock-financial', {
+                url    : '/:symbol',
+                views  : {
+                    'content@app': {
+                        templateUrl: 'app/main/stock/stock-financial/stock-financial.html',
+                        controller : 'StockFinancialController as vm'
+                    }
+                },
+                resolve  : {
+                    Stock: function(msApi, $stateParams)
+                    {
+                        var symbol = $stateParams.symbol;
+                        return msApi.resolve('stock@get', {symbol: symbol});
+                    }
+                }
             });
 
         // Translation
@@ -30,6 +46,10 @@
             'stock-financial',
             {},
             {filter: {method: 'POST', isArray: true}}
+        ]);
+        msApiProvider.register('stock', [
+            'stock/:symbol',
+            {symbol: '@symbol'}
         ]);
 
         // Navigation
