@@ -44,6 +44,10 @@
                             <md-icon md-font-icon="{{vm.currentQuarterlyEPSTrend}}" class="s36 ml-16"></md-icon>
                         </div>
 
+                        <div class="h1 font-weight-500" layout="row" layout-align="start center">
+                            <span>ROE: {{vm.currentQuarterlyROE | number:2}}%</span>
+                        </div>
+
                         <div layout="row" layout-align="start center">
                             <span>Last Quarter: {{vm.lastQuarterlyEPS | number}}</span>
                             <span class="text-boxed-light"
@@ -115,6 +119,10 @@
                                 {{vm.currentAnnualEPSGrowth | number:2}}%
                             </span>
                             <md-icon md-font-icon="{{vm.currentAnnualEPSTrend}}" class="s36 ml-16"></md-icon>
+                        </div>
+
+                        <div class="h1 font-weight-500" layout="row" layout-align="start center">
+                            <span>ROE: {{vm.currentAnnualROE | number:2}}%</span>
                         </div>
 
                         <div layout="row" layout-align="start center">

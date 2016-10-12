@@ -22,6 +22,10 @@
         vm.lastAnnualEPS = getLastAnnualEPS();
         vm.currentAnnualEPSGrowth = getCurrentAnnualEPSGrowth();
         vm.currentAnnualEPSTrend = (vm.currentAnnualEPSGrowth >= 0) ? 'icon-trending-up' : 'icon-trending-down';
+        vm.currentQuarterlyROE = getCurrentQuarterlyROE();
+        vm.lastQuarterlyROE = getLastQuarterlyROE();
+        vm.currentAnnualROE = getCurrentAnnualROE();
+        vm.lastAnnualROE = getLastAnnualROE();
         vm.lastAnnualEPSGrowth = getLastAnnualEPSGrowth();
         vm.quaterlyRevenueUnit = getQuarterlyRevenueUnit();
         vm.annualRevenueUnit = getAnnualRevenueUnit();
@@ -35,7 +39,7 @@
                 {
                     id    : 'eps',
                     name  : 'EPS',
-                    color : 'green',
+                    color : 'red',
                     values: getQuarterlyEPS(),
                     type  : 'line'
                 },
@@ -56,14 +60,14 @@
                     values: getYears()
                 },
                 {
-                    id    : 'EPS',
+                    id    : 'eps',
                     name  : 'EPS',
-                    color : 'green',
+                    color : 'red',
                     values: getAnnualEPS(),
                     type  : 'line'
                 },
                 {
-                    id    : 'Revenue',
+                    id    : 'revenue',
                     name  : 'Revenue',
                     color : 'blue',
                     values: getAnnualRevenue(),
@@ -147,6 +151,46 @@
             }
 
             return null;
+        }
+
+        function getCurrentQuarterlyROE() {
+            var record = Stock.quarterlyRecords[Stock.quarterlyRecords.length-1];
+            var netIncome = record['Net Income'];
+            var equity = record['Total Equity'];
+
+            return (netIncome * 100)/equity;
+        }
+
+        function getLastQuarterlyROE() {
+            if (Stock.quarterlyRecords.length > 1) {
+                var record = Stock.quarterlyRecords[Stock.quarterlyRecords.length-2];
+                var netIncome = record['Net Income'];
+                var equity = record['Total Equity'];
+
+                return (netIncome * 100)/equity;
+            } else {
+                return null;
+            }
+        }
+
+        function getCurrentAnnualROE() {
+            var record = Stock.annualRecords[Stock.annualRecords.length-1];
+            var netIncome = record['Net Income'];
+            var equity = record['Total Equity'];
+
+            return (netIncome * 100)/equity;
+        }
+
+        function getLastAnnualROE() {
+            if (Stock.annualRecords.length > 1) {
+                var record = Stock.quarterlyRecords[Stock.annualRecords.length-2];
+                var netIncome = record['Net Income'];
+                var equity = record['Total Equity'];
+
+                return (netIncome * 100)/equity;
+            } else {
+                return null;
+            }
         }
 
         function getQuarters() {
@@ -268,5 +312,34 @@
 
             return unit;
         }
+
+        function getQuarterlyROE() {
+            var roe = '';
+
+            Stock.quarterlyRecords.forEach(function(record) {
+                var netIncome = record['Net Income'];
+                var equity = record['Total Equity'];
+                var val = netIncome/equity;
+
+                roe += val.toFixed(2) + ',';
+            });
+
+            return roe.slice(0, -1);
+        }
+
+        function getAnnualROE() {
+            var roe = '';
+
+            Stock.annualRecords.forEach(function(record) {
+                var netIncome = record['Net Income'];
+                var equity = record['Total Equity'];
+                var val = netIncome/equity;
+
+                roe += val.toFixed(2) + ',';
+            });
+
+            return roe.slice(0, -1);
+        }
+
     }
 })();
