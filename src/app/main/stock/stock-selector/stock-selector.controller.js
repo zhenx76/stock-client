@@ -33,7 +33,12 @@
                 // Bind an external input as a table wide search box
                 if (searchBox.length > 0) {
                     searchBox.on('keyup', function (event) {
-                        api.search(event.target.value).draw();
+                        var symbol = event.target.value;
+                        api.search(symbol).draw();
+
+                        if (event.which == 13) { // Enter key pressed
+                            matchSymbol(api, symbol);
+                        }
                     });
                 }
             });
@@ -141,6 +146,7 @@
         vm.currentAnnualEPSGrowth = 20;
         vm.lastAnnualEPSGrowth = 15;
         vm.currentAnnualROE = 17;
+        vm.filterSymbol = '';
 
         // Methods
         //////////
@@ -163,24 +169,32 @@
 
         // Private Methods
         //////////
+
         function getFilters() {
-            return {
-                currentQuarterEPSGrowth: vm.currentQuarterEPSGrowth,
-                lastQuarterEPSGrowth: vm.lastQuarterEPSGrowth,
-                currentAnnualEPSGrowth: vm.currentAnnualEPSGrowth,
-                lastAnnualEPSGrowth: vm.lastAnnualEPSGrowth,
-                currentAnnualROE: vm.currentAnnualROE
-            };
+            if (!!vm.filterSymbol) {
+                return {symbol: vm.filterSymbol};
+            } else {
+                return {
+                    currentQuarterEPSGrowth: vm.currentQuarterEPSGrowth,
+                    lastQuarterEPSGrowth: vm.lastQuarterEPSGrowth,
+                    currentAnnualEPSGrowth: vm.currentAnnualEPSGrowth,
+                    lastAnnualEPSGrowth: vm.lastAnnualEPSGrowth,
+                    currentAnnualROE: vm.currentAnnualROE
+                };
+            }
         }
 
         function reloadStock() {
             vm.dtInstance.reloadData(function() {
-                $log.info('table reload');
             }, true);
         }
 
         function renderDataColumn(data, type) {
             if (type == 'display') {
+                if (isNaN(data)) {
+                    return '<div class="red-500-fg">(&#8212)</div>';
+                }
+
                 if (data < 0) {
                     return '<div class="red-500-fg">(' + $filter('number')(data, 2) + ')</div>';
                 } else {
@@ -191,11 +205,19 @@
         }
 
         function renderEditColumn(data, type, full, meta) {
-            return '<md-button class="edit-button md-icon-button"'
+            var buttons = '<md-button class="edit-button md-icon-button"'
                 + ' ng-click="vm.gotoStockDetail(\'' + data.Symbol +'\')" '
                 + ' aria-label="Stock Details" translate translate-attr-aria-label="EC.PRODUCT_DETAILS">'
-                + ' <md-icon md-font-icon="icon-pencil" class="s16"></md-icon>'
+                + ' <md-icon md-font-icon="icon-open-in-app" class="s16"></md-icon>'
                 + '</md-button>';
+
+            buttons += '<md-button class="edit-button md-icon-button"'
+                + ' ng-click="vm.addFavoriteStock(\'' + data.Symbol +'\')" '
+                + ' aria-label="Stock Details" translate translate-attr-aria-label="EC.PRODUCT_DETAILS">'
+                + ' <md-icon md-font-icon="icon-heart-box-outline" class="s16"></md-icon>'
+                + '</md-button>';
+
+            return buttons;
         }
 
         function nFormatter(num) {
@@ -219,6 +241,27 @@
                 return '<div class="red-500-fg">(' + result + ')</div>';
             } else {
                 return result;
+            }
+        }
+
+        function matchSymbol(api, symbol) {
+            var match = false;
+            var newSymbol = symbol.toUpperCase();
+            var oldSymbol = vm.filterSymbol;
+
+            if (!!symbol) {
+                api.data().each(function(row) {
+                    if (row.Symbol == newSymbol) {
+                        // Found a match, no need to fetch from server
+                        match = true;
+                    }
+                });
+            }
+
+            vm.filterSymbol = newSymbol;
+
+            if (!match && oldSymbol != newSymbol) {
+                reloadStock();
             }
         }
     }
