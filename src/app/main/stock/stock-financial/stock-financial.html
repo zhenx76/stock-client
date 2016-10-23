@@ -8,7 +8,14 @@
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent">STOCKS</span>
             </div>
-            <div class="title">{{vm.stockInfo.Symbol}}</div>
+            <div layout="row" layout-align="center start">
+                <span class="title">{{vm.stockInfo.Symbol}}</span>
+                <md-button class="md-icon-button" aria-label="Chart"
+                           ng-href="{{vm.chartingURL}}"
+                           target="_blank">
+                    <md-icon class="icon-chart-histogram"></md-icon>
+                </md-button>
+            </div>
             <div class="secondary-text">
                 <span>{{vm.stockInfo.Name}}</span>
             </div>

@@ -29,6 +29,7 @@
         vm.lastAnnualEPSGrowth = getLastAnnualEPSGrowth();
         vm.quaterlyRevenueUnit = getQuarterlyRevenueUnit();
         vm.annualRevenueUnit = getAnnualRevenueUnit();
+        vm.chartingURL = 'http://stockcharts.com/h-sc/ui?s=' + Stock.info.Symbol + '&p=W&b=5';
 
         vm.quarterlyChart = {
             columns: [
