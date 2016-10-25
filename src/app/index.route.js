@@ -11,7 +11,7 @@
     {
         $locationProvider.html5Mode(true);
 
-        $urlRouterProvider.otherwise('/stock/stock-selector');
+        $urlRouterProvider.otherwise('/stock-selector');
 
         /**
          * Layout Style Switcher

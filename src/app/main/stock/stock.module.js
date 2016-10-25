@@ -12,7 +12,7 @@
         // State
         $stateProvider
             .state('app.stock-selector', {
-                url    : '/stock/stock-selector',
+                url    : '/stock-selector',
                 views  : {
                     'content@app': {
                         templateUrl: 'app/main/stock/stock-selector/stock-selector.html',
@@ -21,7 +21,7 @@
                 }
             })
             .state('app.stock-financial', {
-                url    : '/:symbol',
+                url    : '/stock/:symbol',
                 views  : {
                     'content@app': {
                         templateUrl: 'app/main/stock/stock-financial/stock-financial.html',
