@@ -22,6 +22,6 @@
 
             // Apps
             'app.stock',
-            'app.auth'
+            'app.users'
         ]);
 })();
