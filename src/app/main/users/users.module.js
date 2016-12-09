@@ -3,20 +3,25 @@
     'use strict';
 
     angular
-        .module('app.auth', [
-            'app.auth.register',
-            'app.auth.login',
-            'app.auth.forgot-password',
-            'app.auth.lock',
-            'app.auth.reset-password'
+        .module('app.users', [
+            'app.users.register',
+            'app.users.login',
+            'app.users.forgot-password',
+            'app.users.lock',
+            'app.users.reset-password'
         ])
         .config(config)
         .factory('loginSession', loginSessionService);
 
     /** @ngInject */
-    function config()
+    function config(msApiProvider)
     {
-        // Configurtion stuff goes here
+        // Register authentication API
+        msApiProvider.setBaseUrl('auth/');
+        msApiProvider.register('signup', ['signup']);
+        msApiProvider.register('login', ['login']);
+        msApiProvider.register('logout', ['logout']);
+        msApiProvider.register('user_profile', ['user']);
     }
 
     /** @ngInject */

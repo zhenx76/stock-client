@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.auth.forgot-password')
+        .module('app.users.forgot-password')
         .controller('ForgotPasswordController', ForgotPasswordController);
 
     /** @ngInject */

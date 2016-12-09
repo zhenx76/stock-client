@@ -3,22 +3,22 @@
     'use strict';
 
     angular
-        .module('app.auth.reset-password', [])
+        .module('app.users.reset-password', [])
         .config(config);
 
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider)
     {
         // State
-        $stateProvider.state('app.auth_reset-password', {
-            url      : '/auth/reset-password',
+        $stateProvider.state('app.users_reset-password', {
+            url      : '/users/reset-password',
             views    : {
                 'main@'                                : {
                     templateUrl: 'app/core/layouts/content-only.html',
                     controller : 'MainController as vm'
                 },
-                'content@app.auth_reset-password': {
-                    templateUrl: 'app/main/auth/reset-password/reset-password.html',
+                'content@app.users_reset-password': {
+                    templateUrl: 'app/main/users/reset-password/reset-password.html',
                     controller : 'ResetPasswordController as vm'
                 }
             },
@@ -26,7 +26,7 @@
         });
 
         // Translation
-        $translatePartialLoaderProvider.addPart('app/main/auth/reset-password');
+        $translatePartialLoaderProvider.addPart('app/main/users/reset-password');
     }
 
 })();

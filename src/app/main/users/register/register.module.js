@@ -3,22 +3,22 @@
     'use strict';
 
     angular
-        .module('app.auth.register', [])
+        .module('app.users.register', [])
         .config(config);
 
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider)
     {
         // State
-        $stateProvider.state('app.auth_register', {
-            url      : '/auth/register',
+        $stateProvider.state('app.users_register', {
+            url      : '/users/register',
             views    : {
                 'main@'                          : {
                     templateUrl: 'app/core/layouts/content-only.html',
                     controller : 'MainController as vm'
                 },
-                'content@app.auth_register': {
-                    templateUrl: 'app/main/auth/register/register.html',
+                'content@app.users_register': {
+                    templateUrl: 'app/main/users/register/register.html',
                     controller : 'RegisterController as vm'
                 }
             },
@@ -26,7 +26,7 @@
         });
 
         // Translation
-        $translatePartialLoaderProvider.addPart('app/main/auth/register');
+        $translatePartialLoaderProvider.addPart('app/main/users/register');
     }
 
 })();

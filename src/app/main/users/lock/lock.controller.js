@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.auth.lock')
+        .module('app.users.lock')
         .controller('LockController', LockController);
 
     /** @ngInject */

@@ -7,7 +7,7 @@
 
             <div class="title" translate="REGISTER.TITLE">Create an account</div>
 
-            <form name="registerForm" novalidate>
+            <form name="registerForm" novalidate ng-submit="vm.submitForm()">
                 <md-input-container class="md-block" md-no-float>
                     <input name="username" ng-model="vm.form.username" placeholder="Name"
                            translate translate-attr-placeholder="REGISTER.NAME"

@@ -3,11 +3,11 @@
     'use strict';
 
     angular
-        .module('app.auth.register')
-        .controller('RegisterController', RegisterController);
+        .module('app.users.login')
+        .controller('LoginController', LoginController);
 
     /** @ngInject */
-    function RegisterController()
+    function LoginController()
     {
         // Data
 

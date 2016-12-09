@@ -3,22 +3,22 @@
     'use strict';
 
     angular
-        .module('app.auth.login', [])
+        .module('app.users.login', [])
         .config(config);
 
     /** @ngInject */
     function config($stateProvider, $translatePartialLoaderProvider)
     {
         // State
-        $stateProvider.state('app.auth_login', {
-            url      : '/auth/login',
+        $stateProvider.state('app.users_login', {
+            url      : '/users/login',
             views    : {
                 'main@'                       : {
                     templateUrl: 'app/core/layouts/content-only.html',
                     controller : 'MainController as vm'
                 },
-                'content@app.auth_login': {
-                    templateUrl: 'app/main/auth/login/login.html',
+                'content@app.users_login': {
+                    templateUrl: 'app/main/users/login/login.html',
                     controller : 'LoginController as vm'
                 }
             },
@@ -26,7 +26,7 @@
         });
 
         // Translation
-        $translatePartialLoaderProvider.addPart('app/main/auth/login');
+        $translatePartialLoaderProvider.addPart('app/main/users/login');
     }
 
 })();
