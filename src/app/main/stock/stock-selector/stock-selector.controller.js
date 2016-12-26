@@ -7,7 +7,7 @@
         .controller('StockSelectorController', StockSelectorController);
 
     /** @ngInject */
-    function StockSelectorController(DTOptionsBuilder, DTColumnBuilder, msApi, $state, $compile, $scope, $filter, $timeout, $log)
+    function StockSelectorController(DTOptionsBuilder, DTColumnBuilder, msApi, $state, $compile, $scope, $filter, $timeout, AuthService, $q, $log)
     {
         var vm = this;
 
@@ -165,6 +165,39 @@
 
         vm.gotoStockDetail = function(symbol) {
             $state.go('app.stock-financial', {symbol: symbol});
+        };
+
+        vm.addFavoriteStock = function(symbol) {
+            var user = undefined;
+            AuthService.getMemberInfo()
+                .then(function(memberInfo) {
+                    user = memberInfo;
+
+                    for (var i = 0; i < memberInfo.watch_list.length; i++) {
+                        if (memberInfo.watch_list[i] == symbol) {
+                            break;
+                        }
+                    }
+
+                    if (i == memberInfo.watch_list.length) {
+                        return msApi.resolve('watchList@save', {symbol: symbol});
+                    } else {
+                        // Already in watch list, no need to call server
+                        return $q.reject('cancel');
+                    }
+                })
+                .then(function(result) {
+                    if (result.success) {
+                        user.watch_list.push(symbol);
+                    } else {
+                        return $q.reject(result.msg);
+                    }
+                })
+                .catch(function(error) {
+                    if (error != 'cancel') {
+                        $log.error(error);
+                    }
+                });
         };
 
         // Private Methods

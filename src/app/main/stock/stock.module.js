@@ -51,6 +51,7 @@
             'stock/:symbol',
             {symbol: '@symbol'}
         ]);
+        msApiProvider.register('watchList', ['portfolio/watchlist']);
 
         // Navigation
         msNavigationServiceProvider.saveItem('stocks', {

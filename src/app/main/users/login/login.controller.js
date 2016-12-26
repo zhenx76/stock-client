@@ -26,6 +26,9 @@
                     vm.serverMessage = result;
                     vm.errorMessage = false;
 
+                    return AuthService.getMemberInfo();
+                })
+                .then(function(memberInfo) {
                     // Go to home
                     $state.go('app.stock-selector');
                 })

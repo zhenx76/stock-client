@@ -39,6 +39,7 @@
         var isAuthenticated = false;
         var authToken;
         var username = '';
+        var memberInfo = undefined;
 
         function loadUserCredentials() {
             try {
@@ -80,6 +81,7 @@
             authToken = undefined;
             isAuthenticated = false;
             username = '';
+            memberInfo = undefined;
             $http.defaults.headers.common.Authorization = undefined;
             if ($window.Storage) {
                 $window.localStorage.removeItem(LOCAL_TOKEN_KEY);
@@ -116,6 +118,25 @@
             destroyUserCredentials();
         };
 
+        var getMemberInfo = function() {
+            return $q(function(resolve, reject) {
+                if (isAuthenticated && !!memberInfo) {
+                    resolve(memberInfo);
+                } else {
+                    msApi.resolve('memberinfo@get').then(function(result) {
+                        if (result.success) {
+                            // save a reference to memberInfo
+                            memberInfo = result.msg;
+                            resolve(memberInfo);
+                        } else {
+                            memberInfo = undefined;
+                            reject(result.msg);
+                        }
+                    });
+                }
+            });
+        };
+
         loadUserCredentials();
 
         return {
@@ -123,7 +144,8 @@
             register: register,
             logout: logout,
             isAuthenticated: function() { return isAuthenticated; },
-            getUserName: function() { return username; }
+            getUserName: function() { return username; },
+            getMemberInfo: getMemberInfo
         };
     }
 
