@@ -7,17 +7,14 @@
 
             <div class="title" translate="LOGIN.TITLE">Log in to your account</div>
 
-            <form name="loginForm" novalidate>
+            <form name="loginForm" novalidate ng-submit="vm.submitForm()">
                 <md-input-container class="md-block" md-no-float>
-                    <input type="email" name="email" ng-model="vm.form.email" placeholder="Email"
-                           translate translate-attr-placeholder="LOGIN.EMAIL"
-                           ng-pattern="/^.+@.+\..+$/" required>
-                    <div ng-messages="loginForm.email.$error" role="alert" multiple>
+                    <input name="username" ng-model="vm.form.username" placeholder="User Name"
+                           translate translate-attr-placeholder="LOGIN.NAME"
+                           required>
+                    <div ng-messages="loginForm.username.$error" role="alert">
                         <div ng-message="required">
-                            <span translate="LOGIN.ERRORS.EMAIL_REQUIRED">Email field is required</span>
-                        </div>
-                        <div ng-message="pattern">
-                            <span translate="LOGIN.ERRORS.EMAIL_MUST_VALID">Email must be a valid e-mail address</span>
+                            <span translate="LOGIN.ERRORS.USERNAME_REQUIRED">Username field is required</span>
                         </div>
                     </div>
                 </md-input-container>
@@ -48,6 +45,13 @@
                            translate="LOGIN.LOG_IN" translate-attr-aria-label="LOGIN.LOG_IN">
                     LOG IN
                 </md-button>
+
+                <div ng-if="vm.serverMessage" role="alert">
+                    <span class="text" style="color:green">{{ vm.serverMessage }}</span>
+                </div>
+                <div ng-if="vm.errorMessage" role="alert">
+                    <span class="text" style="color:red">{{ vm.errorMessage }}</span>
+                </div>
             </form>
 
             <div class="separator">
@@ -74,7 +78,7 @@
 
             <div class="register" layout="row" layout-sm="column" layout-align="center center">
                 <span class="text" translate="LOGIN.DONT_HAVE_ACCOUNT">Don't have an account?</span>
-                <a class="link" ui-sref="app.pages_auth_register" translate="LOGIN.CREATE_ACCOUNT">Create an account</a>
+                <a class="link" ui-sref="app.users_register" translate="LOGIN.CREATE_ACCOUNT">Create an account</a>
             </div>
         </div>
     </div>

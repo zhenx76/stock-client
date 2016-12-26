@@ -70,11 +70,18 @@
                            translate-attr-aria-label="REGISTER.CREATE_ACCOUNT">
                     CREATE MY ACCOUNT
                 </md-button>
+
+                <div ng-if="vm.serverMessage" role="alert">
+                    <span class="text" style="color:green">{{ vm.serverMessage }}</span>
+                </div>
+                <div ng-if="vm.errorMessage" role="alert">
+                    <span class="text" style="color:red">{{ vm.errorMessage }}</span>
+                </div>
             </form>
 
             <div class="login" layout="row" layout-xs="column" layout-align="center center">
                 <span class="text" translate="REGISTER.ALREADY_HAVE">Already have an account?</span>
-                <a class="link" ui-sref="app.pages_auth_login" translate="REGISTER.LOGIN">Log in</a>
+                <a class="link" ui-sref="app.users_login" translate="REGISTER.LOGIN">Log in</a>
             </div>
         </div>
     </div>

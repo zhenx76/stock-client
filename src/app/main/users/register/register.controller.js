@@ -7,7 +7,7 @@
         .controller('RegisterController', RegisterController);
 
     /** @ngInject */
-    function RegisterController(msApi, $log)
+    function RegisterController(AuthService, $state, $log)
     {
         var vm = this;
 
@@ -20,15 +20,21 @@
             'firstname': '',
             'lastname': ''
         };
+        vm.serverMessage = false;
+        vm.errorMessage = false;
 
         // Methods
         vm.submitForm = function() {
-            msApi.resolve('signup@save', vm.form)
-                .then(function() {
+            AuthService.register(vm.form)
+                .then(function(result) {
+                    vm.serverMessage = result;
+                    vm.errorMessage = false;
 
+                    $state.go('app.users_login');
                 })
                 .catch(function(error) {
-
+                    vm.serverMessage = false;
+                    vm.errorMessage = error;
                 });
         };
 

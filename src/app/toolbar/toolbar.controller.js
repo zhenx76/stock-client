@@ -7,7 +7,7 @@
         .controller('ToolbarController', ToolbarController);
 
     /** @ngInject */
-    function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService)
+    function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, AuthService)
     {
         var vm = this;
 
@@ -17,6 +17,33 @@
         };
 
         vm.bodyEl = angular.element('body');
+
+        var menuOptions = {
+            'auth': [
+                {
+                    'title': 'My Profile',
+                    'action': getUserProfile
+                },
+                {
+                    'title': 'Sign Out',
+                    'action': signOut
+                }
+            ],
+            'noauth': [
+                {
+                    'title': 'Sign Up',
+                    'action': signUp
+                },
+                {
+                    'title': 'Sign In',
+                    'action': signIn
+                }
+            ]
+        };
+
+        vm.userName = '';
+        vm.userMenuOptions = [];
+
         vm.userStatusOptions = [
             {
                 'title': 'Online',
@@ -67,7 +94,7 @@
 
         // Methods
         vm.toggleSidenav = toggleSidenav;
-        vm.logout = logout;
+        vm.logout = signOut;
         vm.changeLanguage = changeLanguage;
         vm.setUserStatus = setUserStatus;
         vm.toggleHorizontalMobileMenu = toggleHorizontalMobileMenu;
@@ -84,13 +111,20 @@
          */
         function init()
         {
+            // Get current login status
+            loadUser();
+
             // Select the first status as a default
-            vm.userStatus = vm.userStatusOptions[0];
+            //vm.userStatus = vm.userStatusOptions[0];
 
             // Get the selected language directly from angular-translate module setting
             vm.selectedLanguage = vm.languages[$translate.preferredLanguage()];
         }
 
+        function loadUser() {
+            vm.userName = AuthService.getUserName();
+            vm.userMenuOptions = AuthService.isAuthenticated() ? menuOptions['auth'] : menuOptions['noauth'];
+        }
 
         /**
          * Toggle sidenav
@@ -111,12 +145,21 @@
             vm.userStatus = status;
         }
 
-        /**
-         * Logout Function
-         */
-        function logout()
-        {
-            // Do logout here..
+        function signUp() {
+            $state.go('app.users_register');
+        }
+
+        function signIn() {
+            $state.go('app.users_login');
+        }
+
+        function signOut() {
+            AuthService.logout();
+            loadUser(); // reload user
+        }
+
+        function getUserProfile() {
+
         }
 
         /**
