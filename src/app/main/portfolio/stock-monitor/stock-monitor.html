@@ -1,0 +1,194 @@
+<div id="widgets" class="page-layout simple fullwidth doc-page">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">Watch List</span>
+            </div>
+            <div layout="row" layout-align="center start">
+                <span class="title">{{vm.stockInfo.Symbol}}</span>
+                <md-button class="md-icon-button" aria-label="Chart"
+                           ng-href="{{vm.chartingURL}}"
+                           target="_blank">
+                    <md-icon class="icon-chart-histogram"></md-icon>
+                </md-button>
+            </div>
+            <div class="secondary-text">
+                <span>{{vm.stockInfo.Name}}</span>
+            </div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <!-- WIDGET GROUP -->
+        <div class="widget-group" layout="row" flex="100" layout-wrap>
+
+            <!-- WIDGET 1 -->
+            <ms-widget class="h-280" flippable="true" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
+                <!-- Front -->
+                <ms-widget-front class="h-250 p-16 light-blue-bg">
+                    <div class="pb-8" layout="row" layout-align="space-between center">
+                        <div class="h4 font-weight-500 secondary-text">Earnings Per Share (Quarterly)</div>
+                        <md-button aria-label="more" class="md-icon-button"
+                                   ng-click="flipWidget()">
+                            <md-icon md-font-icon="icon-dots-vertical"></md-icon>
+                        </md-button>
+                    </div>
+
+                    <div class="white-fg" layout="column" layout-align="space-between" flex>
+                        <div class="md-display-1" layout="row" layout-align="start center">
+                            <span>{{vm.currentQuarterlyEPS | number}}</span>
+                            <span class="text-boxed-light"
+                                  ng-class="{'green-800-fg': vm.currentQuarterlyEPSGrowth >= 0, 'red-500-fg': vm.currentQuarterlyEPSGrowth < 0}">
+                                {{vm.currentQuarterlyEPSGrowth | number:2}}%
+                            </span>
+                            <md-icon md-font-icon="{{vm.currentQuarterlyEPSTrend}}" class="s36 ml-16"></md-icon>
+                        </div>
+
+                        <div class="h1 font-weight-500" layout="row" layout-align="start center">
+                            <span>ROE: {{vm.currentQuarterlyROE | number:2}}%</span>
+                        </div>
+
+                        <div layout="row" layout-align="start center">
+                            <span>Last Quarter: {{vm.lastQuarterlyEPS | number}}</span>
+                            <span class="text-boxed-light"
+                                  ng-class="{'green-800-fg': vm.lastQuarterlyEPSGrowth >= 0, 'red-500-fg': vm.lastQuarterlyEPSGrowth < 0}">
+                                {{vm.lastQuarterlyEPSGrowth | number:2}}%
+                            </span>
+                        </div>
+                    </div>
+                </ms-widget-front>
+                <!-- / Front -->
+
+                <!-- Back -->
+                <ms-widget-back class="p-16 white-bg">
+                    <div class="h4 weight-500 pb-8">Quarterly EPS</div>
+                    <div class="flip-to-front">
+                        <md-button class="md-icon-button" ng-click="flipWidget()" aria-label="Flip widget">
+                            <md-icon md-font-icon="icon-dots-vertical" class="s16"></md-icon>
+                        </md-button>
+                    </div>
+
+                    <div>
+                        <c3chart class="c3 stroke-2" bindto-id="quaterly-growth">
+                            <chart-column ng-repeat="column in vm.quarterlyChart.columns"
+                                          column-id="{{column.id}}"
+                                          column-name="{{column.name}}"
+                                          column-color="{{column.color}}"
+                                          column-values="{{column.values}}"
+                                          column-type="{{column.type}}"
+                            />
+                            <chart-axes values-x="x" y="revenue" y2="eps"/>
+                            <chart-axis>
+                                <chart-axis-x axis-label="Quarters"
+                                              axis-position="outer-center"
+                                              axis-type="category">
+                                    <chart-axis-x-tick tick-rotate="50"/>
+                                </chart-axis-x>
+                                <chart-axis-y axis-id="y"
+                                              axis-label="Revenue ({{vm.quaterlyRevenueUnit}} $)"
+                                              axis-position="outer-right"></chart-axis-y>
+                                <chart-axis-y axis-id="y2" axis-label="EPS" axis-position="outer-right"></chart-axis-y>
+                            </chart-axis>
+                            <chart-size chart-height="220"/>
+                        </c3chart>
+                    </div>
+
+                </ms-widget-back>
+                <!-- / Back -->
+
+            </ms-widget>
+            <!-- / WIDGET 1 -->
+
+            <!-- WIDGET 2 -->
+            <ms-widget class="h-280" flippable="true" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
+                <!-- Front -->
+                <ms-widget-front class="h-250 p-16 light-green-bg">
+                    <div class="pb-8" layout="row" layout-align="space-between center">
+                        <div class="h4 font-weight-500 secondary-text">Earnings Per Share (Annual)</div>
+                        <md-button aria-label="more" class="md-icon-button"
+                                   ng-click="flipWidget()">
+                            <md-icon md-font-icon="icon-dots-vertical"></md-icon>
+                        </md-button>
+                    </div>
+
+                    <div class="white-fg" layout="column" layout-align="space-between" flex>
+                        <div class="md-display-1" layout="row" layout-align="start center">
+                            <span>{{vm.currentAnnualEPS | number}}</span>
+                            <span class="text-boxed-light"
+                                  ng-class="{'green-800-fg': vm.currentAnnualEPSGrowth >= 0, 'red-500-fg': vm.currentAnnualEPSGrowth < 0}">
+                                {{vm.currentAnnualEPSGrowth | number:2}}%
+                            </span>
+                            <md-icon md-font-icon="{{vm.currentAnnualEPSTrend}}" class="s36 ml-16"></md-icon>
+                        </div>
+
+                        <div class="h1 font-weight-500" layout="row" layout-align="start center">
+                            <span>ROE: {{vm.currentAnnualROE | number:2}}%</span>
+                        </div>
+
+                        <div layout="row" layout-align="start center">
+                            <span>Last Quarter: {{vm.lastAnnualEPS | number}}</span>
+                            <span class="text-boxed-light"
+                                  ng-class="{'green-800-fg': vm.lastAnnualEPSGrowth >= 0, 'red-500-fg': vm.lastAnnualEPSGrowth < 0}">
+                                {{vm.lastAnnualEPSGrowth | number:2}}%
+                            </span>
+                        </div>
+                    </div>
+                </ms-widget-front>
+                <!-- / Front -->
+
+                <!-- Back -->
+                <ms-widget-back class="p-16 white-bg">
+                    <div class="h4 weight-500 pb-8">Annual EPS</div>
+                    <div class="flip-to-front">
+                        <md-button class="md-icon-button" ng-click="flipWidget()" aria-label="Flip widget">
+                            <md-icon md-font-icon="icon-dots-vertical" class="s16"></md-icon>
+                        </md-button>
+                    </div>
+
+                    <div>
+                        <c3chart class="c3 stroke-2" bindto-id="annual-growth">
+                            <chart-column ng-repeat="column in vm.annualChart.columns"
+                                          column-id="{{column.id}}"
+                                          column-name="{{column.name}}"
+                                          column-color="{{column.color}}"
+                                          column-values="{{column.values}}"
+                                          column-type="{{column.type}}"
+                            />
+                            <chart-axes values-x="x" y="revenue" y2="eps"/>
+                            <chart-axis>
+                                <chart-axis-x axis-label="Year"
+                                              axis-position="outer-center"
+                                              axis-type="category">
+                                    <chart-axis-x-tick tick-rotate="50"/>
+                                </chart-axis-x>
+                                <chart-axis-y axis-id="y"
+                                              axis-label="Revenue ({{vm.annualRevenueUnit}} $)"
+                                              axis-position="outer-right">
+                                </chart-axis-y>
+                                <chart-axis-y axis-id="y2" axis-label="EPS" axis-position="outer-right">
+                                </chart-axis-y>
+                            </chart-axis>
+                            <chart-size chart-height="220"/>
+                        </c3chart>
+                    </div>
+
+                </ms-widget-back>
+                <!-- / Back -->
+
+            </ms-widget>
+            <!-- / WIDGET 2 -->
+
+        </div>
+        <!-- / WIDGET GROUP -->
+
+    </div>
+    <!-- / CONTENT -->
+
+</div>

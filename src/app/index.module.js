@@ -22,6 +22,7 @@
 
             // Apps
             'app.stock',
-            'app.users'
+            'app.users',
+            'app.portfolio'
         ]);
 })();
