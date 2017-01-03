@@ -77,11 +77,73 @@
             ]
         };
 
+        // Stock Holding Variables
+        var stockHoldingInfo = Stock.userData;
+        vm.stockHoldingChart = getStockHoldingChartData();
+        vm.nextPriceTarget = getNextPriceTargets();
+
         // Methods
         //////////
+        vm.hasStockHoldings = function() {
+            return stockHoldingInfo.holdings && (stockHoldingInfo.holdings.length > 0);
+        };
 
         // Private Methods
         //////////
+        function getStockHoldingChartData() {
+            var phases = [];
+            var holdings = [];
+
+            for (var i = 0, j = 0; i < stockHoldingInfo.holdings.length; i++) {
+                if (i == 0) {
+                    phases[0] = stockHoldingInfo.holdings[0].phase;
+                    holdings[0] = stockHoldingInfo.holdings[0].shares;
+                } else {
+                    if (stockHoldingInfo.holdings[i].phase == phases[j]) {
+                        holdings[j] += stockHoldingInfo.holdings[i].shares;
+                    } else {
+                        j++;
+                        phases[j] = stockHoldingInfo.holdings[i].phase;
+                        holdings[j] = stockHoldingInfo.holdings[i].shares;
+                    }
+                }
+            }
+
+            return {
+                data   : {
+                    labels: phases,
+                    series: [holdings]
+                },
+                options: {
+                    reverseData      : true,
+                    horizontalBars   : true,
+                    axisY            : {
+                        offset: 100
+                    },
+                    onlyInteger      : true
+                }
+            };
+        }
+
+        function getNextPriceTargets() {
+            if (stockHoldingInfo.nextPriceTarget) {
+                var target = stockHoldingInfo.nextPriceTarget;
+                return {
+                    price: (target.price) ? ('$' + target.price.toFixed(2)) : 'No Buy',
+                    shares: (target.shares) ? target.shares.toFixed(2) : 'Maximized',
+                    sellAt: '$' + target.profitPrice.toFixed(2),
+                    stopLoss: '$' + target.stopLossPrice.toFixed(2)
+                };
+            } else {
+                return {
+                    price: 'N/A',
+                    shares: 'N/A',
+                    sellAt: 'N/A',
+                    stopLoss: 'N/A'
+                };
+            }
+        }
+
         function getCurrentQuarterlyEPS() {
             return Stock.quarterlyRecords[Stock.quarterlyRecords.length-1]["EPS (Diluted)"];
         }

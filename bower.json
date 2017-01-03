@@ -7,6 +7,7 @@
         "angular-aria": "1.5.7",
         "angular-cookies": "1.5.7",
         "angular-chart.js": "0.10.2",
+        "angular-chartist.js": "3.3.13",
         "angular-datatables": "0.5.4",
         "angular-material": "1.1.0-rc.5",
         "angular-messages": "1.5.7",

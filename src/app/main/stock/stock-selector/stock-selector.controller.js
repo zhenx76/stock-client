@@ -164,7 +164,11 @@
         };
 
         vm.gotoStockDetail = function(symbol) {
-            $state.go('app.stock-financial', {symbol: symbol});
+            if (AuthService.isAuthenticated()) {
+                $state.go('app.stock-monitor', {symbol: symbol});
+            } else {
+                $state.go('app.stock-financial', {symbol: symbol});
+            }
         };
 
         vm.addFavoriteStock = function(symbol) {

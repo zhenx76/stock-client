@@ -12,6 +12,7 @@
                 'ngResource',
                 'ngSanitize',
                 'ngMaterial',
+                'angular-chartist',
                 'chart.js',
                 'datatables',
                 'gridshore.c3js.chart',

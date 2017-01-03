@@ -4,4 +4,18 @@
         max-width: inherit;
         padding: 8px;
     }
+
+    /* Use this selector to override bar styles on bar charts. Bars are also strokes so you have maximum freedom in styling them. */
+    .ct-series-a .ct-bar {
+        /* Colour of your bars */
+        stroke: bisque;
+
+        /* The width of your bars */
+        stroke-width: 20px;
+    }
+
+    .ct-label {
+        /* Colour of your labels */
+        color: ivory;
+    }
 }

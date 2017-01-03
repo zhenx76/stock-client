@@ -188,6 +188,60 @@
         </div>
         <!-- / WIDGET GROUP -->
 
+        <!-- WIDGET GROUP -->
+        <div ng-if="vm.hasStockHoldings()" class="widget-group" layout="row" flex="100" layout-wrap>
+
+            <!-- WIDGET 1 -->
+            <ms-widget class="h-220" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
+                <!-- Front -->
+                <ms-widget-front class="h-200 p-16 blue-grey-bg">
+                    <div class="pb-8" layout="row" layout-align="space-between center">
+                        <div class="h4 white-fg font-weight-500 secondary-text">Holdings (in Shares)</div>
+                    </div>
+
+                    <div>
+                        <chartist class="ct-chart"
+                                  chartist-data="vm.stockHoldingChart.data"
+                                  chartist-chart-type="Bar"
+                                  chartist-chart-options="vm.stockHoldingChart.options">
+                        </chartist>
+                    </div>
+                </ms-widget-front>
+                <!-- / Front -->
+            </ms-widget>
+            <!-- / WIDGET 1 -->
+
+            <!-- WIDGET 2 -->
+            <ms-widget class="h-220" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
+                <!-- Front -->
+                <ms-widget-front class="h-200 p-16 orange-bg">
+                    <div class="pb-8" layout="row" layout-align="space-between center">
+                        <div class="h4 white-fg font-weight-500 secondary-text">Next Price Targets</div>
+                    </div>
+
+                    <div class="white-fg" layout="column" flex>
+                        <div class="h2 font-weight-500" layout="row" layout-align="start center">
+                            <span>Price: {{ vm.nextPriceTarget.price }}</span>
+                        </div>
+                        <div class="h2 font-weight-500" layout="row" layout-align="start center">
+                            <span>Shares: {{ vm.nextPriceTarget.shares }}</span>
+                        </div>
+                        <div class="h2 font-weight-500" layout="row" layout-align="start center">
+                            <span>Sell At: {{ vm.nextPriceTarget.sellAt }}</span>
+                        </div>
+                        <div class="h2 font-weight-500" layout="row" layout-align="start center">
+                            <span>Stop Loss: {{ vm.nextPriceTarget.stopLoss }}</span>
+                        </div>
+                    </div>
+
+                </ms-widget-front>
+                <!-- / Front -->
+            </ms-widget>
+            <!-- / WIDGET 2 -->
+
+        </div>
+        <!-- / WIDGET GROUP -->
+
     </div>
     <!-- / CONTENT -->
 
