@@ -7,7 +7,7 @@
         .controller('StockMonitorController', StockMonitorController);
 
     /** @ngInject */
-    function StockMonitorController(Stock, $scope, DTOptionsBuilder, DTColumnBuilder, msApi, $log) {
+    function StockMonitorController(Stock, $scope, msApi, $mdDialog, $mdMedia, $log) {
         var vm = this;
 
         // Variables
@@ -99,6 +99,7 @@
                 text: 'Add New Transaction',
                 key: '1',
                 action: function (e, dt, node, config) {
+                    displayTransactionDialog(e);
                 }
             }]
         };
@@ -163,6 +164,32 @@
                     stopLoss: 'N/A'
                 };
             }
+        }
+
+        function displayTransactionDialog(ev) {
+            var useFullScreen = $mdMedia('sm') || $mdMedia('xs');
+
+            $mdDialog.show({
+                    controller: DialogController,
+                    templateUrl: 'app/main/portfolio/stock-monitor/stock-transaction-dialog.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose:true,
+                    fullscreen: useFullScreen
+                })
+                .then(function(transaction) {
+                    if (transaction) {
+                        $log.info(transaction);
+                    }
+                }, function() {
+                    // Dialog cancelled. Do nothing
+                });
+
+            $scope.$watch(function() {
+                return $mdMedia('xs') || $mdMedia('sm');
+            }, function(wantsFullScreen) {
+                $scope.customFullscreen = (wantsFullScreen === true);
+            });
         }
 
         function getCurrentQuarterlyEPS() {
@@ -426,4 +453,26 @@
         }
 
     }
+
+    function DialogController($scope, $mdDialog) {
+        $scope.transaction = {};
+        $scope.actions = ['BUY', 'SELL'];
+
+        $scope.hide = function() {
+            $mdDialog.hide();
+        };
+
+        $scope.cancel = function() {
+            $mdDialog.cancel();
+        };
+
+        $scope.discard = function() {
+            $mdDialog.hide();
+        };
+
+        $scope.save = function() {
+            $mdDialog.hide($scope.transaction);
+        };
+    }
+
 })();

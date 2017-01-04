@@ -1,0 +1,80 @@
+<md-dialog aria-label="New Transaction"  ng-cloak>
+    <form name="basicForm" class="md-inline-form" novalidate>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Enter Stock Transactions</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="assets/angular-material-assets/img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div layout="column" layout-gt-sm="row">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Action</label>
+                    <md-select ng-model="transaction.action">
+                        <md-option ng-repeat="action in actions">
+                            {{action}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+
+                <form name="myForm">
+                    <md-datepicker name="dateField" ng-model="transaction.date"
+                                   md-placeholder="Enter date"
+                                   required>
+                    </md-datepicker>
+                    <div ng-messages="myForm.dateField.$error">
+                        <div ng-message="valid">The entered value is not a date!</div>
+                        <div ng-message="required">This date is required!</div>
+                    </div>
+                </form>
+            </div>
+
+            <div layout="column" layout-gt-sm="row">
+                <md-input-container flex>
+                    <input type="number" name="price" ng-model="transaction.price"
+                           placeholder="Price"
+                           required>
+                    <div ng-messages="basicForm.price.$error"
+                         role="alert">
+                        <div ng-message="required">
+                            <span>Price field is required.</span>
+                        </div>
+                        <div ng-message="valid">
+                            <span>The entered price is not valid.</span>
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container flex>
+                    <input type="number" name="shares" ng-model="transaction.shares"
+                           placeholder="Shares"
+                           required>
+                    <div ng-messages="basicForm.shares.$error"
+                         role="alert">
+                        <div ng-message="required">
+                            <span>Shares field is required.</span>
+                        </div>
+                        <div ng-message="valid">
+                            <span>The entered shares is not valid.</span>
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="discard()">
+                Discard
+            </md-button>
+            <md-button ng-click="save()">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
