@@ -81,6 +81,27 @@
         var stockHoldingInfo = Stock.userData;
         vm.stockHoldingChart = getStockHoldingChartData();
         vm.nextPriceTarget = getNextPriceTargets();
+        vm.stockTransactions = stockHoldingInfo.transactions || [];
+
+        vm.dtOptions = {
+            dom       : '<"top"f>r<"#dt-title.secondary-text">Bt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+            pagingType: 'simple',
+            pageLength: 5,
+            lengthMenu: [5, 10, 15, 20],
+            autoWidth : false,
+            responsive: true,
+            searching : false,
+            initComplete: function() {
+                document.querySelector('#dt-title').textContent = 'Transactions';
+            },
+            buttons   : [{
+                text: 'Add New Transaction',
+                key: '1',
+                action: function (e, dt, node, config) {
+                    alert('Button activated');
+                }
+            }]
+        };
 
         // Methods
         //////////

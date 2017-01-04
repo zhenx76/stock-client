@@ -242,7 +242,44 @@
         </div>
         <!-- / WIDGET GROUP -->
 
+        <!-- CENTER STOCK TABLE -->
+        <div class="widget-group" layout="column" flex="100" layout-wrap>
+            <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
+                <thead>
+                <tr>
+                    <th class="secondary-text">
+                        <div class="table-header">
+                            <span class="column-title">Action</span>
+                        </div>
+                    </th>
+                    <th class="secondary-text">
+                        <div class="table-header">
+                            <span class="column-title">Price</span>
+                        </div>
+                    </th>
+                    <th class="secondary-text">
+                        <div class="table-header">
+                            <span class="column-title">Shares</span>
+                        </div>
+                    </th>
+                    <th class="secondary-text">
+                        <div class="table-header">
+                            <span class="column-title">Date/Time</span>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="transaction in ::vm.stockTransactions">
+                    <td>{{ transaction.action }}</td>
+                    <td>{{ transaction.price }}</td>
+                    <td>{{ transaction.shares }}</td>
+                    <td>{{ transaction.datetime }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
     <!-- / CONTENT -->
-
 </div>

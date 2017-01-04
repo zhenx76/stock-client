@@ -15,6 +15,7 @@
                 'angular-chartist',
                 'chart.js',
                 'datatables',
+                'datatables.buttons',
                 'gridshore.c3js.chart',
                 'pascalprecht.translate',
                 'ui.router'
