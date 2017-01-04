@@ -91,6 +91,7 @@
             autoWidth : false,
             responsive: true,
             searching : false,
+            ordering  : false,
             initComplete: function() {
                 document.querySelector('#dt-title').textContent = 'Transactions';
             },
@@ -98,7 +99,6 @@
                 text: 'Add New Transaction',
                 key: '1',
                 action: function (e, dt, node, config) {
-                    alert('Button activated');
                 }
             }]
         };
