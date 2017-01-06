@@ -50,6 +50,7 @@
             'portfolio/stock/:symbol',
             {symbol: '@symbol'}
         ]);
+        msApiProvider.register('update', ['portfolio/update']);
 
         // Navigation
         msNavigationServiceProvider.saveItem('stocks.watch-list', {

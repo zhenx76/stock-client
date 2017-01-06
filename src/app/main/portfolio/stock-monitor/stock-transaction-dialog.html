@@ -11,6 +11,8 @@
         </md-toolbar>
 
         <md-dialog-content>
+            <h2>{{transaction.symbol}}</h2>
+
             <div layout="column" layout-gt-sm="row">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Action</label>
@@ -22,7 +24,7 @@
                 </md-input-container>
 
                 <form name="myForm">
-                    <md-datepicker name="dateField" ng-model="transaction.date"
+                    <md-datepicker name="dateField" ng-model="transaction.datetime"
                                    md-placeholder="Enter date"
                                    required>
                     </md-datepicker>

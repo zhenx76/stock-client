@@ -7,7 +7,7 @@
         .controller('StockMonitorController', StockMonitorController);
 
     /** @ngInject */
-    function StockMonitorController(Stock, $scope, msApi, $mdDialog, $mdMedia, $log) {
+    function StockMonitorController(Stock, DTOptionsBuilder, DTColumnBuilder, $scope, $q, $compile, $filter, $mdDialog, $mdMedia, $log) {
         var vm = this;
 
         // Variables
@@ -77,32 +77,49 @@
             ]
         };
 
-        // Stock Holding Variables
-        var stockHoldingInfo = Stock.userData;
-        vm.stockHoldingChart = getStockHoldingChartData();
-        vm.nextPriceTarget = getNextPriceTargets();
-        vm.stockTransactions = stockHoldingInfo.transactions || [];
+        var stockHoldingInfo = {};
 
-        vm.dtOptions = {
-            dom       : '<"top"f>r<"#dt-title.secondary-text">Bt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
-            pagingType: 'simple',
-            pageLength: 5,
-            lengthMenu: [5, 10, 15, 20],
-            autoWidth : false,
-            responsive: true,
-            searching : false,
-            ordering  : false,
-            initComplete: function() {
+        initUserData(Stock.userData);
+
+        vm.dtInstance = {};
+        vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
+                return $q.when(vm.stockTransactions);
+            })
+            .withDOM('<"top"f>r<"#dt-title.secondary-text">Bt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>')
+            .withPaginationType('simple')
+            .withOption('lengthMenu', [5, 10, 15, 20])
+            .withOption('pageLength', 5)
+            .withOption('autoWidth', false)
+            .withOption('responsive', true)
+            .withOption('ordering', false)
+            .withOption('searching', false)
+            .withOption('createdRow', function (row) {
+                // Recompiling so we can bind Angular directive to the DT
+                $compile(angular.element(row).contents())($scope);
+            })
+            .withOption('initComplete', function () {
                 document.querySelector('#dt-title').textContent = 'Transactions';
-            },
-            buttons   : [{
+            })
+            .withButtons([{
                 text: 'Add New Transaction',
                 key: '1',
                 action: function (e, dt, node, config) {
                     displayTransactionDialog(e);
                 }
-            }]
-        };
+            }]);
+
+        vm.dtColumns = [
+            DTColumnBuilder.newColumn('action').withTitle('Action'),
+            DTColumnBuilder.newColumn('price').withTitle('Price').renderWith(function(data) {
+                return $filter('currency')(data, '$', 2)
+            }),
+            DTColumnBuilder.newColumn('shares').withTitle('Shares').renderWith(function(data) {
+                return $filter('number')(data, 2);
+            }),
+            DTColumnBuilder.newColumn('datetime').withTitle('Date/Time').renderWith(function(data) {
+                return $filter('date')(data);
+            })
+        ];
 
         // Methods
         //////////
@@ -112,6 +129,14 @@
 
         // Private Methods
         //////////
+        function initUserData(userData) {
+            // Stock Holding Variables
+            stockHoldingInfo = userData;
+            vm.stockHoldingChart = getStockHoldingChartData();
+            vm.nextPriceTarget = getNextPriceTargets();
+            vm.stockTransactions = getStockTransactions();
+        }
+
         function getStockHoldingChartData() {
             var phases = [];
             var holdings = [];
@@ -147,6 +172,18 @@
             };
         }
 
+        function getStockTransactions() {
+            var transactions = stockHoldingInfo.transactions || [];
+            transactions.forEach(function(transaction) {
+                var datetime = new Date(transaction.datetime);
+                if (isNaN(Date.parse(datetime))) {
+                    datetime = null;
+                }
+                transaction.datetime = datetime;
+            });
+            return transactions;
+        }
+
         function getNextPriceTargets() {
             if (stockHoldingInfo.nextPriceTarget) {
                 var target = stockHoldingInfo.nextPriceTarget;
@@ -170,18 +207,20 @@
             var useFullScreen = $mdMedia('sm') || $mdMedia('xs');
 
             $mdDialog.show({
+                    locals: {stockInfo: vm.stockInfo},
                     controller: DialogController,
                     templateUrl: 'app/main/portfolio/stock-monitor/stock-transaction-dialog.html',
                     parent: angular.element(document.body),
                     targetEvent: ev,
-                    clickOutsideToClose:true,
+                    clickOutsideToClose: true,
                     fullscreen: useFullScreen
                 })
-                .then(function(transaction) {
-                    if (transaction) {
-                        $log.info(transaction);
+                .then(function (userData) {
+                    if (userData) {
+                        initUserData(userData);
+                        vm.dtInstance.reloadData();
                     }
-                }, function() {
+                }, function () {
                     // Dialog cancelled. Do nothing
                 });
 
@@ -454,8 +493,8 @@
 
     }
 
-    function DialogController($scope, $mdDialog) {
-        $scope.transaction = {};
+    function DialogController($scope, $mdDialog, $log, msApi, stockInfo) {
+        $scope.transaction = {'symbol' : stockInfo.Symbol};
         $scope.actions = ['BUY', 'SELL'];
 
         $scope.hide = function() {
@@ -467,11 +506,19 @@
         };
 
         $scope.discard = function() {
-            $mdDialog.hide();
+            $mdDialog.cancel();
         };
 
         $scope.save = function() {
-            $mdDialog.hide($scope.transaction);
+            msApi.resolve('update@save', $scope.transaction).then(function(result) {
+                if (result.success) {
+                    $mdDialog.hide(result.data);
+                } else {
+                    $mdDialog.cancel();
+                }
+            }).catch(function() {
+                $mdDialog.cancel();
+            });
         };
     }
 
