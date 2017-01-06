@@ -124,14 +124,16 @@
         // Methods
         //////////
         vm.hasStockHoldings = function() {
-            return stockHoldingInfo.holdings && (stockHoldingInfo.holdings.length > 0);
+            return ('holdings' in stockHoldingInfo)
+                && stockHoldingInfo.holdings
+                && (stockHoldingInfo.holdings.length > 0);
         };
 
         // Private Methods
         //////////
         function initUserData(userData) {
             // Stock Holding Variables
-            stockHoldingInfo = userData;
+            stockHoldingInfo = userData || {};
             vm.stockHoldingChart = getStockHoldingChartData();
             vm.nextPriceTarget = getNextPriceTargets();
             vm.stockTransactions = getStockTransactions();
@@ -140,6 +142,10 @@
         function getStockHoldingChartData() {
             var phases = [];
             var holdings = [];
+
+            if (!('holdings' in stockHoldingInfo)) {
+                return null;
+            }
 
             for (var i = 0, j = 0; i < stockHoldingInfo.holdings.length; i++) {
                 if (i == 0) {
