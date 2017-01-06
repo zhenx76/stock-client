@@ -23,6 +23,18 @@
                     'requireAuthentication': true
                 }
             })
+            .state('app.stock-positions', {
+                url    : '/stock-positions',
+                views  : {
+                    'content@app': {
+                        templateUrl: 'app/main/portfolio/stock-positions/stock-positions.html',
+                        controller : 'StockPositionsController as vm'
+                    }
+                },
+                data   : {
+                    'requireAuthentication': true
+                }
+            })
             .state('app.stock-monitor', {
                 url    : '/stock-monitor/:symbol',
                 views  : {
@@ -46,6 +58,7 @@
         // Api
         msApiProvider.setBaseUrl('api/v1/');
         msApiProvider.register('watchList', ['portfolio/watchlist']);
+        msApiProvider.register('positions', ['portfolio/positions']);
         msApiProvider.register('stock-portfolio', [
             'portfolio/stock/:symbol',
             {symbol: '@symbol'}
@@ -57,6 +70,16 @@
             title    : 'Watch List',
             icon     : 'icon-heart',
             state    : 'app.watch-list',
+            /*stateParams: {
+             'param1': 'page'
+             },*/
+            weight   : 1
+        });
+
+        msNavigationServiceProvider.saveItem('stocks.stock-positions', {
+            title    : 'Positions',
+            icon     : 'icon-bank',
+            state    : 'app.stock-positions',
             /*stateParams: {
              'param1': 'page'
              },*/
