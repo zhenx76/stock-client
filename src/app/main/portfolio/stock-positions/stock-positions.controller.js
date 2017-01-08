@@ -47,7 +47,10 @@
                 return $filter('number')(data, 0);
             }),
             DTColumnBuilder.newColumn('phase').withTitle('Phase'),
-            DTColumnBuilder.newColumn('nextPriceTarget').withTitle('Next Price Target').renderWith(function(data) {
+            DTColumnBuilder.newColumn('nextPriceTarget').withTitle('Next Buy Point').renderWith(function(data) {
+                return $filter('currency')(data, '$', 2)
+            }),
+            DTColumnBuilder.newColumn('profitPrice').withTitle('Profit Point').renderWith(function(data) {
                 return $filter('currency')(data, '$', 2)
             }),
             DTColumnBuilder.newColumn('stopLossPrice').withTitle('Stop Loss Price').renderWith(function(data) {

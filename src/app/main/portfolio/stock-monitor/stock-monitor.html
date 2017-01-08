@@ -191,7 +191,7 @@
         <!-- WIDGET GROUP -->
         <div ng-if="vm.hasStockHoldings()" class="widget-group" layout="row" flex="100" layout-wrap>
 
-            <!-- WIDGET 1 -->
+            <!-- WIDGET 3 -->
             <ms-widget class="h-220" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
                 <!-- Front -->
                 <ms-widget-front class="h-200 p-16 blue-grey-bg">
@@ -209,9 +209,9 @@
                 </ms-widget-front>
                 <!-- / Front -->
             </ms-widget>
-            <!-- / WIDGET 1 -->
+            <!-- / WIDGET 3 -->
 
-            <!-- WIDGET 2 -->
+            <!-- WIDGET 4 -->
             <ms-widget class="h-220" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
                 <!-- Front -->
                 <ms-widget-front class="h-200 p-16 orange-bg">
@@ -221,10 +221,10 @@
 
                     <div class="white-fg" layout="column" flex>
                         <div class="h2 font-weight-500" layout="row" layout-align="start center">
-                            <span>Price: {{ vm.nextPriceTarget.price }}</span>
+                            <span>Buy At: {{ vm.nextPriceTarget.price }}</span>
                         </div>
                         <div class="h2 font-weight-500" layout="row" layout-align="start center">
-                            <span>Shares: {{ vm.nextPriceTarget.shares }}</span>
+                            <span>Buy Shares: {{ vm.nextPriceTarget.shares }}</span>
                         </div>
                         <div class="h2 font-weight-500" layout="row" layout-align="start center">
                             <span>Sell At: {{ vm.nextPriceTarget.sellAt }}</span>
@@ -237,7 +237,7 @@
                 </ms-widget-front>
                 <!-- / Front -->
             </ms-widget>
-            <!-- / WIDGET 2 -->
+            <!-- / WIDGET 4 -->
 
         </div>
         <!-- / WIDGET GROUP -->
