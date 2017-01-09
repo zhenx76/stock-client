@@ -62,7 +62,41 @@
         };
 
         vm.removeFavoriteStock = function(symbol) {
+            var user = undefined;
+            var i = 0;
+            if (AuthService.isAuthenticated()) {
+                AuthService.getMemberInfo()
+                    .then(function(memberInfo) {
+                        user = memberInfo;
 
+                        for (i = 0; i < memberInfo.watch_list.length; i++) {
+                            if (memberInfo.watch_list[i] == symbol) {
+                                break;
+                            }
+                        }
+
+                        if (i == memberInfo.watch_list.length) {
+                            // Symbol not in watch list. Do nothing
+                            return $q.reject('cancel');
+                        } else {
+                            return msApi.resolve('watchList@delete', {symbol: symbol});
+                        }
+                    })
+                    .then(function(result) {
+                        if (result.success) {
+                            // remove symbol from watch list
+                            user.watch_list.splice(i, 1);
+                            reloadStock();
+                        } else {
+                            return $q.reject(result.msg);
+                        }
+                    })
+                    .catch(function(error) {
+                        if (error != 'cancel') {
+                            $log.error(error);
+                        }
+                    });
+            }
         };
 
         vm.addFavoriteStock = function(symbol) {
