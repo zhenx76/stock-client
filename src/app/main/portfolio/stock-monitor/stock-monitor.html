@@ -9,15 +9,25 @@
                 <span class="parent">Watch List</span>
             </div>
             <div layout="row" layout-align="center start">
-                <span class="title">{{vm.stockInfo.Symbol}}</span>
+                <span class="h1">{{vm.stockInfo.Name}}({{vm.stockInfo.Symbol}})</span>
                 <md-button class="md-icon-button" aria-label="Chart"
                            ng-href="{{vm.chartingURL}}"
                            target="_blank">
                     <md-icon class="icon-chart-histogram"></md-icon>
                 </md-button>
             </div>
-            <div class="secondary-text">
-                <span>{{vm.stockInfo.Name}}</span>
+            <div layout="row" layout-align="space-between center">
+                <div layout="column" layout-align="start center">
+                    <span class="title black-500-fg">{{vm.snapShot.price | number:2}}</span>
+                </div>
+                <div class="text-boxed-light" ng-class="{'green-800-fg': vm.snapShot.change >= 0, 'red-500-fg': vm.snapShot.change < 0}"
+                     layout="column" layout-align="start center">
+                    <span class="h2">{{vm.snapShot.change >= 0 ? '+' : '-'}}{{vm.snapShot.change | number:2}}</span>
+                </div>
+                <div class="text-boxed-light" ng-class="{'green-800-fg': vm.snapShot.changeInPercent >= 0, 'red-500-fg': vm.snapShot.changeInPercent < 0}"
+                     layout="column" layout-align="start center">
+                    <span class="h2">({{vm.snapShot.changeInPercent >= 0 ? '+' : '-'}}{{vm.snapShot.changeInPercent * 100 | number:2}}%)</span>
+                </div>
             </div>
         </div>
     </div>
