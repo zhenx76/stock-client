@@ -231,7 +231,7 @@
             var revenue = '';
 
             Stock.quarterlyRecords.forEach(function(record) {
-                var num = record.Revenue;
+                var num = record.Revenue || 0;
                 var unit = getQuarterlyRevenueUnit();
 
                 if (unit == 'B') {
@@ -252,7 +252,7 @@
             var revenue = '';
 
             Stock.annualRecords.forEach(function(record) {
-                var num = record.Revenue;
+                var num = record.Revenue || 0;
                 var unit = getAnnualRevenueUnit();
 
                 if (unit == 'B') {
