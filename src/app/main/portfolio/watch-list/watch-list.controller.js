@@ -44,6 +44,7 @@
 
         vm.dtColumns = [
             DTColumnBuilder.newColumn('Symbol').withTitle('Symbol'),
+            DTColumnBuilder.newColumn('Snapshot').withTitle('Price').renderWith(renderSnapshot),
             DTColumnBuilder.newColumn('CurrentQuarterGrowth').withTitle('% EPS<br />(This Quarter)').renderWith(renderDataColumn),
             DTColumnBuilder.newColumn('PreviousQuarterGrowth').withTitle('% EPS<br />(Last Quarter)').renderWith(renderDataColumn),
             DTColumnBuilder.newColumn('CurrentAnnualGrowth').withTitle('% EPS<br />(This Year)').renderWith(renderDataColumn),
@@ -142,6 +143,24 @@
             }, true);
         }
 
+        function renderSnapshot(data, type) {
+            if (type == 'display') {
+                if (isNaN(data.price)) {
+                    return '<div class="red-500-fg">(&#8212)</div>';
+                }
+
+                if (data.changeInPercent < 0) {
+                    return '<div class="red-500-fg">' +
+                        $filter('currency')(data.price, '$', 2) +
+                        ' (' + $filter('number')(data.changeInPercent * 100, 2) + '%)</div>';
+                } else {
+                    return '<div class="green-800-fg">' +
+                        $filter('currency')(data.price, '$', 2) +
+                        ' (+' + $filter('number')(data.changeInPercent * 100, 2) + '%)</div>';
+                }
+            }
+            return data;
+        }
         function renderDataColumn(data, type) {
             if (type == 'display') {
                 if (isNaN(data)) {
