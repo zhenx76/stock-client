@@ -43,6 +43,7 @@
 
         vm.dtColumns = [
             DTColumnBuilder.newColumn('symbol').withTitle('Symbol'),
+            DTColumnBuilder.newColumn('snapshot').withTitle('Price').renderWith(renderSnapshot),
             DTColumnBuilder.newColumn('totalShares').withTitle('Total Shares').renderWith(function(data) {
                 return $filter('number')(data, 0);
             }),
@@ -77,6 +78,25 @@
                 + '</md-button>';
 
             return buttons;
+        }
+
+        function renderSnapshot(data, type) {
+            if (type == 'display') {
+                if (isNaN(data.price)) {
+                    return '<div class="red-500-fg">(&#8212)</div>';
+                }
+
+                if (data.changeInPercent < 0) {
+                    return '<div class="red-500-fg">' +
+                        $filter('currency')(data.price, '$', 2) +
+                        ' (' + $filter('number')(data.changeInPercent * 100, 2) + '%)</div>';
+                } else {
+                    return '<div class="green-800-fg">' +
+                        $filter('currency')(data.price, '$', 2) +
+                        ' (+' + $filter('number')(data.changeInPercent * 100, 2) + '%)</div>';
+                }
+            }
+            return data;
         }
     }
 })();

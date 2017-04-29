@@ -161,6 +161,7 @@
             }
             return data;
         }
+
         function renderDataColumn(data, type) {
             if (type == 'display') {
                 if (isNaN(data)) {
