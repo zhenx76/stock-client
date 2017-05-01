@@ -8,12 +8,17 @@
                 <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
                 <span class="parent">Watch List</span>
             </div>
-            <div layout="row" layout-align="center start">
+            <div layout="row" layout-align="space-between center">
                 <span class="h1">{{vm.stockInfo.Name}}({{vm.stockInfo.Symbol}})</span>
                 <md-button class="md-icon-button" aria-label="Chart"
                            ng-href="{{vm.chartingURL}}"
                            target="_blank">
                     <md-icon class="icon-chart-histogram"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="Yahoo Finance"
+                           ng-href="{{vm.yahooFinanceURL}}"
+                           target="_blank">
+                    <md-icon class="icon-information"></md-icon>
                 </md-button>
             </div>
             <div layout="row" layout-align="space-between center">
