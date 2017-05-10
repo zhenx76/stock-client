@@ -10,11 +10,18 @@
             </div>
             <div layout="row" layout-align="space-between center">
                 <span class="h1">{{vm.stockInfo.Name}}({{vm.stockInfo.Symbol}})</span>
+
+                <md-button class="md-icon-button add-watchlist-button" ng-click="vm.toggleWatchList()">
+                    <md-icon md-menu-origin md-font-icon="icon-star" ng-class="{'amber-600-fg' : vm.isFavoriteStock}"></md-icon>
+                    <md-tooltip md-direction="bottom">Click to add to or remove from watch list</md-tooltip>
+                </md-button>
+
                 <md-button class="md-icon-button" aria-label="Chart"
                            ng-href="{{vm.chartingURL}}"
                            target="_blank">
                     <md-icon class="icon-chart-histogram"></md-icon>
                 </md-button>
+
                 <md-button class="md-icon-button" aria-label="Yahoo Finance"
                            ng-href="{{vm.yahooFinanceURL}}"
                            target="_blank">

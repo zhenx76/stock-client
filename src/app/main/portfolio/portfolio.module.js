@@ -4,7 +4,8 @@
 
     angular
         .module('app.portfolio', [])
-        .config(config);
+        .config(config)
+        .service('PortfolioService', portfolioService);
 
     /** @ngInject */
     function config($stateProvider, msApiProvider, msNavigationServiceProvider)
@@ -85,5 +86,132 @@
              },*/
             weight   : 1
         });
+    }
+
+    /** @ngInject */
+    function portfolioService($q, $log, msApi, AuthService) {
+        function removeFavoriteStock(symbol) {
+            return $q(function(resolve, reject) {
+                if (AuthService.isAuthenticated()) {
+                    var user = undefined;
+                    var i = 0;
+
+                    AuthService.getMemberInfo()
+                        .then(function (memberInfo) {
+                            user = memberInfo;
+
+                            for (i = 0; i < memberInfo.watch_list.length; i++) {
+                                if (memberInfo.watch_list[i] == symbol) {
+                                    break;
+                                }
+                            }
+
+                            if (i == memberInfo.watch_list.length) {
+                                // Symbol not in watch list. Do nothing
+                                return $q.reject('cancel');
+                            } else {
+                                return msApi.resolve('watchList@delete', {symbol: symbol});
+                            }
+                        })
+                        .then(function(result) {
+                            if (result.success) {
+                                // remove symbol from watch list
+                                user.watch_list.splice(i, 1);
+                                resolve();
+                            } else {
+                                return $q.reject(result.msg);
+                            }
+                        })
+                        .catch(function (error) {
+                            if (error != 'cancel') {
+                                $log.error(error);
+                            }
+                            reject(error);
+                        });
+                } else {
+                    reject('User not authenticated');
+                }
+            });
+        }
+
+        function addFavoriteStock(symbol) {
+            return $q(function(resolve, reject) {
+                if (AuthService.isAuthenticated()) {
+                    var user = undefined;
+                    AuthService.getMemberInfo()
+                        .then(function(memberInfo) {
+                            user = memberInfo;
+
+                            for (var i = 0; i < memberInfo.watch_list.length; i++) {
+                                if (memberInfo.watch_list[i] == symbol) {
+                                    break;
+                                }
+                            }
+
+                            if (i == memberInfo.watch_list.length) {
+                                return msApi.resolve('watchList@save', {symbol: symbol});
+                            } else {
+                                // Already in watch list, no need to call server
+                                return $q.reject('cancel');
+                            }
+                        })
+                        .then(function(result) {
+                            if (result.success) {
+                                user.watch_list.push(symbol);
+                                resolve();
+                            } else {
+                                return $q.reject(result.msg);
+                            }
+                        })
+                        .catch(function(error) {
+                            if (error != 'cancel') {
+                                $log.error(error);
+                            }
+                            reject(error);
+                        });
+                } else {
+                    reject('User not authenticated');
+                }
+            });
+        }
+
+        function isFavoriteStock(symbol) {
+            return $q(function(resolve, reject) {
+                if (AuthService.isAuthenticated()) {
+                    var user = undefined;
+                    AuthService.getMemberInfo()
+                        .then(function (memberInfo) {
+                            user = memberInfo;
+
+                            for (var i = 0; i < memberInfo.watch_list.length; i++) {
+                                if (memberInfo.watch_list[i] == symbol) {
+                                    break;
+                                }
+                            }
+
+                            if (i == memberInfo.watch_list.length) {
+                                resolve(false);
+                            } else {
+                                // Already in watch list, no need to call server
+                                resolve(true);
+                            }
+                        })
+                        .catch(function (error) {
+                            if (error != 'cancel') {
+                                $log.error(error);
+                            }
+                            reject(error);
+                        });
+                } else {
+                    reject('User not authenticated');
+                }
+            });
+        }
+
+        return {
+            addFavoriteStock: addFavoriteStock,
+            removeFavoriteStock: removeFavoriteStock,
+            isFavoriteStock: isFavoriteStock
+        };
     }
 })();

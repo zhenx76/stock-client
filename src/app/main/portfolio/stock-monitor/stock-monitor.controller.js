@@ -7,7 +7,7 @@
         .controller('StockMonitorController', StockMonitorController);
 
     /** @ngInject */
-    function StockMonitorController(Stock, DTOptionsBuilder, DTColumnBuilder, $scope, $q, $compile, $filter, $mdDialog, $mdMedia, $log) {
+    function StockMonitorController(Stock, DTOptionsBuilder, DTColumnBuilder, $scope, $q, $compile, $filter, $mdDialog, $mdMedia, PortfolioService, $log) {
         var vm = this;
 
         // Variables
@@ -32,6 +32,7 @@
         vm.chartingURL = 'http://stockcharts.com/h-sc/ui?s=' + Stock.info.Symbol + '&p=W&b=5';
         vm.yahooFinanceURL = 'http://finance.yahoo.com/quote/' + Stock.info.Symbol;
         vm.snapShot = Stock.snapshot;
+        vm.isFavoriteStock = false;
 
         vm.quarterlyChart = {
             columns: [
@@ -131,6 +132,18 @@
                 && (stockHoldingInfo.holdings.length > 0);
         };
 
+        vm.toggleWatchList = function() {
+            if (vm.isFavoriteStock) {
+                PortfolioService.removeFavoriteStock(vm.stockInfo.Symbol).then(function() {
+                    vm.isFavoriteStock = false;
+                });
+            } else {
+                PortfolioService.addFavoriteStock(vm.stockInfo.Symbol).then(function() {
+                    vm.isFavoriteStock = true;
+                });
+            }
+        };
+
         // Private Methods
         //////////
         function initUserData(userData) {
@@ -139,6 +152,11 @@
             vm.stockHoldingChart = getStockHoldingChartData();
             vm.nextPriceTarget = getNextPriceTargets();
             vm.stockTransactions = getStockTransactions();
+
+            // Check if it's in watch list
+            PortfolioService.isFavoriteStock(vm.stockInfo.Symbol).then(function (result) {
+                vm.isFavoriteStock = result;
+            });
         }
 
         function getStockHoldingChartData() {
