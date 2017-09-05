@@ -7,7 +7,7 @@
         .controller('StockMonitorController', StockMonitorController);
 
     /** @ngInject */
-    function StockMonitorController(Stock, DTOptionsBuilder, DTColumnBuilder, $scope, $q, $compile, $filter, $mdDialog, $mdMedia, PortfolioService, $log) {
+    function StockMonitorController(Stock, DTOptionsBuilder, DTColumnBuilder, $scope, $q, $compile, $filter, $mdDialog, $mdMedia, PortfolioService, $sce, $log) {
         var vm = this;
 
         // Variables
@@ -31,6 +31,7 @@
         vm.annualRevenueUnit = getAnnualRevenueUnit();
         vm.chartingURL = 'http://stockcharts.com/h-sc/ui?s=' + Stock.info.Symbol + '&p=W&b=5';
         vm.yahooFinanceURL = 'http://finance.yahoo.com/quote/' + Stock.info.Symbol;
+        vm.tradingViewWidget = getTradingViewWidgetURL();
         vm.snapShot = Stock.snapshot;
         vm.isFavoriteStock = false;
 
@@ -157,6 +158,19 @@
             PortfolioService.isFavoriteStock(vm.stockInfo.Symbol).then(function (result) {
                 vm.isFavoriteStock = result;
             });
+        }
+
+        function getTradingViewWidgetURL() {
+            var url = 'https://www.tradingview.com/widgetembed/?symbol=' +
+                vm.stockInfo.Symbol +
+                '&interval=D&hidesidetoolbar=0&symboledit=0&saveimage=1&toolbarbg=f1f3f6&' +
+                'studies=BB@tv-basicstudies%1FMACD@tv-basicstudies%1FRSI@tv-basicstudies' +
+                '&hideideas=1&theme=Light&style=1&timezone=exchange&studies_overrides=%7B%7D&overrides=%7B%7D' +
+                '&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en' +
+                '&utm_source=www.tradingview.com&utm_medium=widget&utm_campaign=chart&utm_term=' +
+                vm.stockInfo.Symbol;
+
+            return $sce.trustAsResourceUrl(url);
         }
 
         function getStockHoldingChartData() {

@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.stock', [])
+        .module('app.stock', ['ngSanitize'])
         .config(config);
 
     /** @ngInject */

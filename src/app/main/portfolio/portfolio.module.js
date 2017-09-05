@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('app.portfolio', [])
+        .module('app.portfolio', ['ngSanitize'])
         .config(config)
         .service('PortfolioService', portfolioService);
 
