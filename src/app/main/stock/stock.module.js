@@ -11,6 +11,15 @@
     {
         // State
         $stateProvider
+            .state('app.stock-market', {
+                url    : '/stock-market',
+                views  : {
+                    'content@app': {
+                        templateUrl: 'app/main/stock/stock-market/stock-market.html',
+                        controller : 'StockMarketController as vm'
+                    }
+                }
+            })
             .state('app.stock-selector', {
                 url    : '/stock-selector',
                 views  : {
@@ -60,8 +69,16 @@
             weight: 1
         });
 
+        msNavigationServiceProvider.saveItem('stocks.market', {
+            title    : 'Stock Market',
+            icon     : 'icon-tile-four',
+            state    : 'app.stock-market',
+            translate: 'STOCKS.MARKET',
+            weight   : 1
+        });
+
         msNavigationServiceProvider.saveItem('stocks.selector', {
-            title    : 'Nasdaq',
+            title    : 'Stock Screener',
             icon     : 'icon-tile-four',
             state    : 'app.stock-selector',
             /*stateParams: {

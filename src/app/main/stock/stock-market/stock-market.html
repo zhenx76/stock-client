@@ -1,0 +1,53 @@
+<div id="market-overview" class="page-layout simple fullwidth doc-page">
+
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+        <div layout="column" layout-align="center start">
+            <div class="breadcrumb" layout="row" layout-align="start center">
+                <md-icon md-font-icon="icon-home" class="s16"></md-icon>
+                <md-icon md-font-icon="icon-chevron-right" class="s16 separator"></md-icon>
+                <span class="parent">MARKET</span>
+            </div>
+            <div layout="row" layout-align="center start">
+                <span class="h1">Market Overview</span>
+            </div>
+        </div>
+    </div>
+    <!-- / HEADER -->
+
+    <!-- CONTENT -->
+    <div class="left">
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab label="S&P 500">
+                <md-content class="md-padding">
+                    <!-- TradingView Widget BEGIN -->
+                    <iframe ng-src="{{vm.sp500URL}}" width="100%" height="800" allowfullscreen frameborder="0"></iframe>
+                    <!-- TradingView Widget END -->
+                </md-content>
+            </md-tab>
+            <md-tab label="NASDAQ">
+                <md-content class="md-padding">
+                    <!-- TradingView Widget BEGIN -->
+                    <iframe ng-src="{{vm.nasdaqURL}}" width="100%" height="800" allowfullscreen frameborder="0"></iframe>
+                    <!-- TradingView Widget END -->
+                </md-content>
+            </md-tab>
+            <md-tab label="DOW">
+                <md-content class="md-padding">
+                    <!-- TradingView Widget BEGIN -->
+                    <iframe ng-src="{{vm.dowURL}}" width="100%" height="800" allowfullscreen frameborder="0"></iframe>
+                    <!-- TradingView Widget END -->
+                </md-content>
+            </md-tab>
+            <md-tab label="Russel 2000">
+                <md-content class="md-padding">
+                    <!-- TradingView Widget BEGIN -->
+                    <iframe ng-src="{{vm.russelURL}}" width="100%" height="800" allowfullscreen frameborder="0"></iframe>
+                    <!-- TradingView Widget END -->
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </div>
+    <!-- / CONTENT -->
+
+</div>
