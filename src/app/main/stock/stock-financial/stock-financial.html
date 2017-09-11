@@ -10,16 +10,6 @@
             </div>
             <div layout="row" layout-align="center start">
                 <span class="h1">{{vm.stockInfo.Name}}({{vm.stockInfo.Symbol}})</span>
-                <md-button class="md-icon-button" aria-label="Chart"
-                           ng-href="{{vm.chartingURL}}"
-                           target="_blank">
-                    <md-icon class="icon-chart-histogram"></md-icon>
-                </md-button>
-                <md-button class="md-icon-button" aria-label="Yahoo Finance"
-                           ng-href="{{vm.yahooFinanceURL}}"
-                           target="_blank">
-                    <md-icon class="icon-information"></md-icon>
-                </md-button>
             </div>
             <div layout="row" layout-align="space-between center">
                 <div layout="column" layout-align="start center">
@@ -44,7 +34,7 @@
             <md-tab label="Technical">
                 <md-content class="md-padding">
                     <!-- TradingView Widget BEGIN -->
-                    <iframe ng-src="{{vm.tradingViewWidget}}" width="80%" height="800" allowfullscreen frameborder="0"></iframe>
+                    <iframe ng-src="{{vm.tradingViewWidget}}" width="100%" height="800" allowfullscreen frameborder="0"></iframe>
                     <!-- TradingView Widget END -->
                 </md-content>
             </md-tab>

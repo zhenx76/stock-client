@@ -17,13 +17,10 @@
 <md-list>
     <md-subheader class="md-no-sticky"><span translate="QUICKPANEL.EVENTS">Events</span></md-subheader>
 
-    <md-list-item class="md-2-line" ng-repeat="event in vm.events" ng-click="dummyFunction()">
-        <div class="md-list-item-text">
-            <h3>{{event.title}}</h3>
+    <!-- TradingView Widget BEGIN -->
+    <iframe ng-src="{{vm.calendarURL}}" width="100%" height="500" allowfullscreen frameborder="0"></iframe>
+    <!-- TradingView Widget END -->
 
-            <p>{{event.detail}}</p>
-        </div>
-    </md-list-item>
 </md-list>
 
 <md-divider></md-divider>

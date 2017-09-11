@@ -7,7 +7,7 @@
         .controller('QuickPanelController', QuickPanelController);
 
     /** @ngInject */
-    function QuickPanelController(msApi)
+    function QuickPanelController(msApi, $sce)
     {
         var vm = this;
 
@@ -18,6 +18,8 @@
             cloud : false,
             retro : true
         };
+
+        vm.calendarURL = generateCalendarWidgetURL();
 
         msApi.request('quickPanel.activities@get', {},
             // Success
@@ -46,6 +48,10 @@
         // Methods
 
         //////////
+        function generateCalendarWidgetURL() {
+            var url = 'https://s.tradingview.com/eventswidgetembed/#importanceFilter=1&currencyFilter=USD&utm_source=www.tradingview.com&utm_medium=widget&utm_campaign=events';
+            return $sce.trustAsResourceUrl(url);
+        }
     }
 
 })();
