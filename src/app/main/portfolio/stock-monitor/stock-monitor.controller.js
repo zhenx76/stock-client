@@ -32,6 +32,8 @@
         vm.chartingURL = 'http://stockcharts.com/h-sc/ui?s=' + Stock.info.Symbol + '&p=W&b=5';
         vm.yahooFinanceURL = 'http://finance.yahoo.com/quote/' + Stock.info.Symbol;
         vm.tradingViewWidget = getTradingViewWidgetURL();
+        vm.optionPutCallRatioImg = getPutCallRatioURL();
+        vm.optionOpenInterestImg = getOpenInterestURL();
         vm.snapShot = Stock.snapshot;
         vm.isFavoriteStock = false;
 
@@ -170,6 +172,22 @@
                 '&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en' +
                 '&utm_source=www.tradingview.com&utm_medium=widget&utm_campaign=chart&utm_term=' +
                 vm.stockInfo.Symbol;
+
+            return $sce.trustAsResourceUrl(url);
+        }
+
+        function getPutCallRatioURL() {
+            var url = 'http://www.optionistics.com/f/inset.pl?vol=0&stk=1&isopt=0&symbol=' +
+                vm.stockInfo.Symbol +
+                '&pc=1&numdays=63';
+
+            return $sce.trustAsResourceUrl(url);
+        }
+
+        function getOpenInterestURL() {
+            var url = 'http://www.optionistics.com/f/inset.pl?vol=1&stk=1&isopt=0&symbol=' +
+                vm.stockInfo.Symbol +
+                '&pc=1&numdays=63';
 
             return $sce.trustAsResourceUrl(url);
         }

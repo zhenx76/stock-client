@@ -203,6 +203,24 @@
                 <!-- / WIDGET GROUP -->
 
             </md-tab>
+
+            <md-tab label="Option">
+                <!-- WIDGET GROUP -->
+                <div class="widget-group" layout="row" flex="100" layout-wrap>
+                    <!-- WIDGET 1 -->
+                    <ms-widget class="w-430 h-400" flippable="true" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
+                        <!-- Front -->
+                        <ms-widget-front class="w-430 h-400 light-grey-bg">
+                            <img ng-src="{{vm.optionPutCallRatioImg}}">
+                            <img ng-src="{{vm.optionOpenInterestImg}}">
+                        </ms-widget-front>
+                        <!-- / Front -->
+                    </ms-widget>
+                    <!-- / WIDGET 1 -->
+                </div>
+                <!-- / WIDGET GROUP -->
+            </md-tab>
+
         </md-tabs>
     </div>
     <!-- / CONTENT -->
