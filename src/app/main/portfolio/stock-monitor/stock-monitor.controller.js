@@ -7,7 +7,7 @@
         .controller('StockMonitorController', StockMonitorController);
 
     /** @ngInject */
-    function StockMonitorController(Stock, DTOptionsBuilder, DTColumnBuilder, $scope, $q, $compile, $filter, $mdDialog, $mdMedia, PortfolioService, $sce, $log) {
+    function StockMonitorController(Stock, StockQuotes, DTOptionsBuilder, DTColumnBuilder, $scope, $q, $compile, $filter, $mdDialog, $mdMedia, PortfolioService, $sce, $log) {
         var vm = this;
 
         // Variables
@@ -34,7 +34,6 @@
         vm.tradingViewWidget = getTradingViewWidgetURL();
         vm.optionPutCallRatioImg = getPutCallRatioURL();
         vm.optionOpenInterestImg = getOpenInterestURL();
-        vm.snapShot = Stock.snapshot;
         vm.isFavoriteStock = false;
 
         vm.quarterlyChart = {
@@ -127,8 +126,23 @@
             })
         ];
 
+        getQuotes();
+
         // Methods
         //////////
+
+        $scope.$on('stockQuotesService::newQuotes', function() {
+            getQuotes();
+        });
+
+        function getQuotes() {
+            var symbol = vm.stockInfo.Symbol;
+            var snapshot = StockQuotes.getQuotes([symbol]);
+            if (snapshot.hasOwnProperty(symbol)) {
+                vm.snapShot = snapshot[symbol];
+            }
+        }
+
         vm.hasStockHoldings = function() {
             return ('holdings' in stockHoldingInfo)
                 && stockHoldingInfo.holdings
