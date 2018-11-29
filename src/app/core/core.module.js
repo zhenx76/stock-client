@@ -18,7 +18,7 @@
                 'datatables.buttons',
                 'gridshore.c3js.chart',
                 'pascalprecht.translate',
-                'ui.router'
-
+                'ui.router',
+                'angular-websocket'
             ]);
 })();

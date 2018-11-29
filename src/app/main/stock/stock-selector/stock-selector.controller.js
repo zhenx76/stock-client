@@ -7,14 +7,11 @@
         .controller('StockSelectorController', StockSelectorController);
 
     /** @ngInject */
-    function StockSelectorController(DTOptionsBuilder, DTColumnBuilder, msApi, $state, $compile, $scope, $filter, $timeout, AuthService, $q, $log)
+    function StockSelectorController(DTOptionsBuilder, DTColumnBuilder, msApi, $state, $compile, $scope, $filter, $timeout, AuthService, StockQuotes, $q, $log)
     {
         var vm = this;
 
-        vm.dtOptions = DTOptionsBuilder.fromFnPromise(
-            function() {
-                return msApi.resolve('stock-financial@filter', getFilters());
-            })
+        vm.dtOptions = DTOptionsBuilder.fromFnPromise(getDataTablePromise)
             .withDOM('rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>')
             .withPaginationType('simple')
             .withOption('lengthMenu', [10, 20, 50, 100])
@@ -45,6 +42,7 @@
 
         vm.dtColumns = [
             DTColumnBuilder.newColumn('Symbol').withTitle('Symbol'),
+            DTColumnBuilder.newColumn('Price').withTitle('Price').renderWith(renderPriceColumn),
             DTColumnBuilder.newColumn('CurrentQuarterGrowth').withTitle('% EPS<br />(This Quarter)').renderWith(renderDataColumn),
             DTColumnBuilder.newColumn('PreviousQuarterGrowth').withTitle('% EPS<br />(Last Quarter)').renderWith(renderDataColumn),
             DTColumnBuilder.newColumn('CurrentAnnualGrowth').withTitle('% EPS<br />(This Year)').renderWith(renderDataColumn),
@@ -208,6 +206,52 @@
 
         // Private Methods
         //////////
+        var dataTablePromise = null;
+
+        $scope.$on('stockQuotesService::newQuotes', function() {
+            refreshStock();
+        });
+
+        function getDataTablePromise() {
+            if (!dataTablePromise) {
+                dataTablePromise = msApi.resolve('stock-financial@filter', getFilters());
+            }
+            return dataTablePromise.then(function(Data) {
+                // Request stock quotes from quote service
+                var symbols = [];
+
+                for (var i = 0; i < Data.length; i++) {
+                    Data[i]['Price'] = {};
+                    symbols.push(Data[i]['Symbol']);
+                }
+
+                var snapshot = StockQuotes.getQuotes(symbols);
+
+                for (var symbol in snapshot) {
+                    if (snapshot.hasOwnProperty(symbol)) {
+                        for (i = 0; i < Data.length; i++) {
+                            if (Data[i]['Symbol'] == symbol) {
+                                Data[i]['Price'] = snapshot[symbol];
+                            }
+                        }
+                    }
+                }
+
+                return Data;
+            });
+        }
+
+        // reload all the stock information including financial data
+        function reloadStock() {
+            dataTablePromise = null;
+            refreshStock();
+        }
+
+        // only refresh the stock prices
+        function refreshStock() {
+            vm.dtInstance.reloadData(function() {
+            }, true);
+        }
 
         function getFilters() {
             if (!!vm.filterSymbol) {
@@ -223,11 +267,6 @@
             }
         }
 
-        function reloadStock() {
-            vm.dtInstance.reloadData(function() {
-            }, true);
-        }
-
         function renderDataColumn(data, type) {
             if (type == 'display') {
                 if (isNaN(data)) {
@@ -238,6 +277,23 @@
                     return '<div class="red-500-fg">(' + $filter('number')(data, 2) + ')</div>';
                 } else {
                     return $filter('number')(data, 2);
+                }
+            }
+            return data;
+        }
+
+        function renderPriceColumn(data, type) {
+            if (type == 'display') {
+                if (isEmptyObject(data) || isNaN(data.price) || isNaN(data.changeInPercent)) {
+                    return '<div class="green-500-fg">&#8212</div>';
+                }
+
+
+                var text = $filter('number')(data.price, 2) + ' (' + $filter('number')(data.changeInPercent * 100, 2) + '%)';
+                if (data.changeInPercent < 0) {
+                    return '<div class="red-500-fg">' + text + '</div>';
+                } else {
+                    return '<div class="green-500-fg">' + text + '</div>';
                 }
             }
             return data;
@@ -257,6 +313,11 @@
                 + '</md-button>';
 
             return buttons;
+        }
+
+        // This should work in node.js and other ES5 compliant implementations.
+        function isEmptyObject(obj) {
+            return !Object.keys(obj).length;
         }
 
         function nFormatter(num) {

@@ -7,7 +7,7 @@
         .controller('StockFinancialController', StockFinancialController);
 
     /** @ngInject */
-    function StockFinancialController(Stock, $scope, DTOptionsBuilder, DTColumnBuilder, msApi, $sce, $log) {
+    function StockFinancialController(Stock, $scope, StockQuotes, DTOptionsBuilder, DTColumnBuilder, msApi, $sce, $log) {
         var vm = this;
 
         // Variables
@@ -34,7 +34,6 @@
         vm.tradingViewWidget = getTradingViewWidgetURL();
         vm.optionPutCallRatioImg = getPutCallRatioURL();
         vm.optionOpenInterestImg = getOpenInterestURL();
-        vm.snapShot = Stock.snapshot;
 
         vm.quarterlyChart = {
             columns: [
@@ -82,11 +81,26 @@
             ]
         };
 
+        getQuotes();
+
         // Methods
         //////////
 
         // Private Methods
         //////////
+
+        $scope.$on('stockQuotesService::newQuotes', function() {
+            getQuotes();
+        });
+
+        function getQuotes() {
+            var symbol = vm.stockInfo.Symbol;
+            var snapshot = StockQuotes.getQuotes([symbol]);
+            if (snapshot.hasOwnProperty(symbol)) {
+                vm.snapShot = snapshot[symbol];
+            }
+        }
+
         function getTradingViewWidgetURL() {
             var url = 'https://www.tradingview.com/widgetembed/?symbol=' +
                 vm.stockInfo.Symbol +
