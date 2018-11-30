@@ -7,16 +7,13 @@
         .controller('StockPositionsController', StockPositionsController);
 
     /** @ngInject */
-    function StockPositionsController(DTOptionsBuilder, DTColumnBuilder, msApi, $state, $compile, $scope, $filter, $timeout, AuthService, $q, $log)
+    function StockPositionsController(DTOptionsBuilder, DTColumnBuilder, msApi, $state, $compile, $scope, $filter, $timeout, AuthService, StockQuotes, $q, $log)
     {
         var vm = this;
 
         // Variables
         //////////
-        vm.dtOptions = DTOptionsBuilder.fromFnPromise(
-            function() {
-                return msApi.resolve('positions@query'); // Use $resource.query to get array data
-            })
+        vm.dtOptions = DTOptionsBuilder.fromFnPromise(getDataTablePromise)
             .withDOM('rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>')
             .withPaginationType('simple')
             .withOption('lengthMenu', [5, 10, 15, 20])
@@ -70,6 +67,53 @@
 
         // Private Methods
         //////////
+        var dataTablePromise = null;
+
+        $scope.$on('stockQuotesService::newQuotes', function() {
+            refreshStock();
+        });
+
+        function getDataTablePromise() {
+            if (!dataTablePromise) {
+                dataTablePromise = msApi.resolve('positions@query');
+            }
+            return dataTablePromise.then(function(Data) {
+                // Request stock quotes from quote service
+                var symbols = [];
+
+                for (var i = 0; i < Data.length; i++) {
+                    Data[i]['snapshot'] = {};
+                    symbols.push(Data[i]['symbol']);
+                }
+
+                var snapshot = StockQuotes.getQuotes(symbols);
+
+                for (var symbol in snapshot) {
+                    if (snapshot.hasOwnProperty(symbol)) {
+                        for (i = 0; i < Data.length; i++) {
+                            if (Data[i]['symbol'] == symbol) {
+                                Data[i]['snapshot'] = snapshot[symbol];
+                            }
+                        }
+                    }
+                }
+
+                return Data;
+            });
+        }
+
+        // reload all the stock information including financial data
+        function reloadStock() {
+            dataTablePromise = null;
+            refreshStock();
+        }
+
+        // only refresh the stock prices
+        function refreshStock() {
+            vm.dtInstance.reloadData(function() {
+            }, true);
+        }
+
         function renderEditColumn(data, type, full, meta) {
             var buttons = '<md-button class="edit-button md-icon-button"'
                 + ' ng-click="vm.gotoStockDetail(\'' + data.symbol +'\')" '
