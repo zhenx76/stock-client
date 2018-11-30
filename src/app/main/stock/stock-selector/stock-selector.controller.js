@@ -284,16 +284,22 @@
 
         function renderPriceColumn(data, type) {
             if (type == 'display') {
-                if (isEmptyObject(data) || isNaN(data.price) || isNaN(data.changeInPercent)) {
+                if (isEmptyObject(data)) {
                     return '<div class="green-500-fg">&#8212</div>';
                 }
 
+                if (isNaN(data.price)) {
+                    return '<div class="red-500-fg">(&#8212)</div>';
+                }
 
-                var text = $filter('number')(data.price, 2) + ' (' + $filter('number')(data.changeInPercent * 100, 2) + '%)';
                 if (data.changeInPercent < 0) {
-                    return '<div class="red-500-fg">' + text + '</div>';
+                    return '<div class="red-500-fg">' +
+                        $filter('currency')(data.price, '$', 2) +
+                        ' (' + $filter('number')(data.changeInPercent * 100, 2) + '%)</div>';
                 } else {
-                    return '<div class="green-500-fg">' + text + '</div>';
+                    return '<div class="green-800-fg">' +
+                        $filter('currency')(data.price, '$', 2) +
+                        ' (+' + $filter('number')(data.changeInPercent * 100, 2) + '%)</div>';
                 }
             }
             return data;
