@@ -10,7 +10,7 @@
     function stockQuotesService($websocket, $location, $rootScope, $log) {
         var quotes = {};
         var id;
-        var url = 'ws://' + $location.host() + ':' + 8080;
+        var url = 'ws://' + $location.host() + ':' + 80;
 
         // Open a WebSocket connection
         $log.info('StockQuoteServer: connecting to ' + url);
